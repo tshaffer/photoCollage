@@ -2,5 +2,8 @@
 
 export * from './baseAction';
 export * from './baseReducer';
-export * from './template';
-export * from './templateProperty';
+export * from './photoCollage';
+export * from './photoCollageAttributes';
+export * from './photoCollageSpecs';
+export * from './photoCollection';
+export * from './photoPlayer';

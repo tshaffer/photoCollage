@@ -1,9 +1,11 @@
 import {
   BsUiModelState,
   createModel,
-  createTemplate,
-  createTemplateProperty,
-  createBsColor,
+  PhotoCollageAttributes,
+  PhotoCollageItem,
+  PhotoCollageSpec,
+  PhotoCollection,
+  PhotoPlayer,
 } from '../type';
 import {
   // BsUiModelAction,
@@ -19,10 +21,30 @@ import {
 
 const fetchModelAsync = (): Promise<BsUiModelState> => {
   return new Promise((resolve) => {
-    const color = createBsColor(255, 0, 0, 0);
-    const templateProperty = createTemplateProperty(color);
-    const template = createTemplate(templateProperty);
-    const model = createModel(template);
+    const photoCollage: PhotoCollageItem[] = [];
+    const photoCollageAttributes: PhotoCollageAttributes = {
+      photosRootDirectory: '',
+      photoCollageSpecIndex: 0,
+    };
+    const photoCollageSpecs: PhotoCollageSpec[] = [];
+    const photoCollection: PhotoCollection = {
+      mediaItemsById: {},
+      albums: {},
+      photosInCollection: [],
+    };
+    const photoPlayer: PhotoPlayer = {
+      playbackActive: false,
+      timeBetweenUpdates: 5,
+      photoCollageSpec: '',
+      photosInCollage: [],
+    };
+    const model = createModel(
+      photoCollage,
+      photoCollageAttributes,
+      photoCollageSpecs,
+      photoCollection,
+      photoPlayer,
+    );
     resolve(model);
   });
 };

@@ -29,6 +29,15 @@ export type BsUiModelDispatch = Dispatch<any>;
 
 /** @internal */
 /** @private */
+export interface PhotoCollageModelBaseAction<T> extends Action {
+  type: string;   // override Any - must be a string
+  payload: T;
+  error?: boolean;
+  meta?: {};
+}
+
+/** @internal */
+/** @private */
 export interface BsUiModelBaseAction extends Action {
   type: string;   // override Any - must be a string
   payload: {};

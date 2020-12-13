@@ -1,1 +1,2 @@
-export { Template } from './Template';
+export { PhotoCollage } from './PhotoCollage';
+export { PhotoCollageCanvas } from './PhotoCollageCanvas';

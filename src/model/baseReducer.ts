@@ -11,10 +11,11 @@ import {
   BsUiModelBaseAction,
   BsUiModelBatchAction,
 } from './baseAction';
-import {
-  templateReducer,
-  isValidTemplateState,
-} from './template';
+import { photoCollageAttributesReducer } from './photoCollageAttributes';
+import { photoCollageReducer } from './photoCollage';
+import { photoCollageSpecsReducer } from './photoCollageSpecs';
+import { photoCollectionReducer } from './photoCollection';
+import { photoPlayerReducer } from './photoPlayer';
 
 // -----------------------------------------------------------------------
 // Defaults
@@ -44,7 +45,11 @@ const enableBatching = (
 };
 
 export const bsUiModelReducer: BsUiReducer = enableBatching(combineReducers<BsUiModelState>({
-  template: templateReducer,
+  photoCollage: photoCollageReducer,
+  photoCollageAttributes: photoCollageAttributesReducer,
+  photoCollageSpecs: photoCollageSpecsReducer,
+  photoCollection: photoCollectionReducer,
+  photoPlayer: photoPlayerReducer,
 }));
 
 // -----------------------------------------------------------------------
@@ -52,11 +57,13 @@ export const bsUiModelReducer: BsUiReducer = enableBatching(combineReducers<BsUi
 // -----------------------------------------------------------------------
 
 export const isValidBsUiModelState = (state: any): boolean => {
-  return !isNil(state)
-    && state.hasOwnProperty('template') && isValidTemplateState(state.template);
+  return !isNil(state);
+  // TEDTODO - add remaining properties
+    // && state.hasOwnProperty('template') && isValidTemplateState(state.template);
 };
 
 export const isValidBsUiModelStateShallow = (state: any): boolean => {
-  return !isNil(state)
-    && state.hasOwnProperty('template');
+  return !isNil(state);
+  // TEDTODO - add remaining properties
+  // && state.hasOwnProperty('template');
 };
