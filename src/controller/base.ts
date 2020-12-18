@@ -7,16 +7,13 @@ import {
   PhotoCollection,
   PhotoPlayer,
 } from '../type';
-import {
-  bsUiModelRehydrateModel,
-  bsUiModelResetModel,
-} from '../model';
 
 // -----------------------------------------------------------------------
 // Utilities
 // -----------------------------------------------------------------------
 
-const fetchModelAsync = (): Promise<PhotoCollageModelState> => {
+export const fetchModelAsync = (): Promise<PhotoCollageModelState> => {
+  console.log('foo');
   return new Promise((resolve) => {
     const photoCollage: PhotoCollageItem[] = [];
     const photoCollageAttributes: PhotoCollageAttributes = {
@@ -49,16 +46,3 @@ const fetchModelAsync = (): Promise<PhotoCollageModelState> => {
 // -----------------------------------------------------------------------
 // Controller Methods
 // -----------------------------------------------------------------------
-
-export const initModel = () => {
-  return (dispatch: any) => {
-    return fetchModelAsync()
-      .then((model) => dispatch(bsUiModelRehydrateModel(model)));
-  };
-};
-
-export const resetModel = () => {
-  return (dispatch: any) => {
-    return dispatch(bsUiModelResetModel());
-  };
-};

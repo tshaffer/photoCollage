@@ -13,18 +13,6 @@ import { PhotoCollageModelState } from '../type';
 
 /** @internal */
 /** @private */
-export const BSUIMODEL_BATCH = 'BSUIMODEL_BATCH';
-
-/** @internal */
-/** @private */
-export const BSUIMODEL_REHYDRATE = 'BSUIMODEL_REHYDRATE';
-
-/** @internal */
-/** @private */
-export const BSUIMODEL_RESET = 'BSUIMODEL_RESET';
-
-/** @internal */
-/** @private */
 export type BsUiModelDispatch = Dispatch<any>;
 
 /** @internal */
@@ -65,12 +53,6 @@ export type BsUiModelThunkAction<T> = (
 
 /** @internal */
 /** @private */
-export const bsUiModelBatchAction = (action: BsUiModelBaseAction[]): BsUiModelBatchAction => {
-  return {type: BSUIMODEL_BATCH, payload: action};
-};
-
-/** @internal */
-/** @private */
 export interface BsUiModelBatchAction extends Action {
   type: string;
   payload: BsUiModelBaseAction[];
@@ -81,25 +63,3 @@ export interface BsUiModelBatchAction extends Action {
 export interface RehydrateBsUiModelParams {
   newPhotoCollageModelState: PhotoCollageModelState;
 }
-
-/** @internal */
-/** @private */
-export type RehydrateBsUiModelAction = BsUiModelAction<RehydrateBsUiModelParams>;
-export const bsUiModelRehydrateModel = (PhotoCollageModelState: PhotoCollageModelState): RehydrateBsUiModelAction => {
-  return {
-    type: BSUIMODEL_REHYDRATE,
-    payload: {
-      newPhotoCollageModelState: PhotoCollageModelState,
-    },
-  };
-};
-
-/** @internal */
-/** @private */
-export type ResetBsUiModelAction = BsUiModelAction<null>;
-export const bsUiModelResetModel = (): ResetBsUiModelAction => {
-  return {
-    type: BSUIMODEL_RESET,
-    payload: null,
-  };
-};
