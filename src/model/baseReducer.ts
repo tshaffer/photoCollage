@@ -5,7 +5,7 @@ import {
   combineReducers
 } from 'redux';
 import { isNil } from 'lodash';
-import { BsUiModelState } from '../type';
+import { PhotoCollageModelState } from '../type';
 import {
   BSUIMODEL_BATCH,
   BsUiModelBaseAction,
@@ -27,14 +27,14 @@ import { photoPlayerReducer } from './photoPlayer';
 // Reducers
 // -----------------------------------------------------------------------
 
-export type BsUiReducer = Reducer<BsUiModelState>;
+export type BsUiReducer = Reducer<PhotoCollageModelState>;
 const enableBatching = (
-    reduce: (state: BsUiModelState, action: BsUiModelBaseAction | BsUiModelBatchAction) => BsUiModelState,
+  reduce: (state: PhotoCollageModelState, action: BsUiModelBaseAction | BsUiModelBatchAction) => PhotoCollageModelState,
 ): BsUiReducer => {
   return function batchingReducer(
-    state: BsUiModelState,
+    state: PhotoCollageModelState,
     action: BsUiModelBaseAction | BsUiModelBatchAction,
-  ): BsUiModelState {
+  ): PhotoCollageModelState {
     switch (action.type) {
       case BSUIMODEL_BATCH:
         return (action as BsUiModelBatchAction).payload.reduce(batchingReducer, state);
@@ -44,7 +44,7 @@ const enableBatching = (
   };
 };
 
-export const bsUiModelReducer: BsUiReducer = enableBatching(combineReducers<BsUiModelState>({
+export const bsUiModelReducer: BsUiReducer = enableBatching(combineReducers<PhotoCollageModelState>({
   photoCollage: photoCollageReducer,
   photoCollageAttributes: photoCollageAttributesReducer,
   photoCollageSpecs: photoCollageSpecsReducer,
@@ -56,13 +56,13 @@ export const bsUiModelReducer: BsUiReducer = enableBatching(combineReducers<BsUi
 // Validators
 // -----------------------------------------------------------------------
 
-export const isValidBsUiModelState = (state: any): boolean => {
+export const isValidPhotoCollageModelState = (state: any): boolean => {
   return !isNil(state);
   // TEDTODO - add remaining properties
-    // && state.hasOwnProperty('template') && isValidTemplateState(state.template);
+  // && state.hasOwnProperty('template') && isValidTemplateState(state.template);
 };
 
-export const isValidBsUiModelStateShallow = (state: any): boolean => {
+export const isValidPhotoCollageModelStateShallow = (state: any): boolean => {
   return !isNil(state);
   // TEDTODO - add remaining properties
   // && state.hasOwnProperty('template');

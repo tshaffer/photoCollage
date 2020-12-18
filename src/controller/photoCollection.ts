@@ -1,5 +1,5 @@
 import isomorphicPath from 'isomorphic-path';
-import * as fs from 'fs-extra';
+import * as fs from 'fs';
 // import * as sizeOf from 'image-size';
 
 import {

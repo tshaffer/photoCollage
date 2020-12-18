@@ -1,4 +1,5 @@
 import { PhotoCollageConfig } from '../type';
+import * as fs from 'fs-extra';
 
 export let photoCollageConfig: PhotoCollageConfig;
 
@@ -36,7 +37,24 @@ export const readConfig = (pathToConfigFile: string) => {
   // const config = dotenv.config( { path: '/Users/tedshaffer/Documents/Projects/bsPhotoCollage/src/config/config.env' }).parsed;
   // console.log('config: ', config);
 
-  const rawConfig = dotenv.config({ path: pathToConfigFile }).parsed;
+  let rawConfig: any;
+
+  try {
+
+    console.log('pathToConfigFile');
+    console.log(pathToConfigFile);
+
+    const data = fs.readFileSync(pathToConfigFile);
+    console.log('contents of config file');
+    console.log(data.toString());
+
+    // const rawConfig = dotenv.config({ path: pathToConfigFile }).parsed;
+    // const rawConfig = dotenv.config({ path: pathToConfigFile }).parsed;
+    rawConfig = dotenv.config({ path: pathToConfigFile }).parsed;
+  }
+  catch (err) {
+    console.log('Error: ' + err.message);
+  }
 
   photoCollageConfig = {
     volumeSpec: rawConfig.volumeSpec,

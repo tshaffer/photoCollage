@@ -1,7 +1,7 @@
 /** @module Selector:base */
 
-import { BsUiModelState } from '../type';
-import { isValidBsUiModelStateShallow } from '../model';
+import { PhotoCollageModelState } from '../type';
+import { isValidPhotoCollageModelStateShallow } from '../model';
 import {
   BsUiError,
   BsUiErrorType,
@@ -9,20 +9,20 @@ import {
 
 /** @internal */
 /** @private */
-export const bsUiModelFilterBaseState = (state: any): BsUiModelState => {
-  if (state.hasOwnProperty('bsuimodel') && isValidBsUiModelStateShallow(state.bsuimodel)) {
-    return state.bsuimodel as BsUiModelState;
-  } else if (isValidBsUiModelStateShallow(state)) {
-    return state as BsUiModelState;
+export const bsUiModelFilterBaseState = (state: any): PhotoCollageModelState => {
+  if (state.hasOwnProperty('bsuimodel') && isValidPhotoCollageModelStateShallow(state.bsuimodel)) {
+    return state.bsuimodel as PhotoCollageModelState;
+  } else if (isValidPhotoCollageModelStateShallow(state)) {
+    return state as PhotoCollageModelState;
   } else {
-    const exceptionMessage = `state must be of type BsUiModelState or have a field bsuimodel
-      of type BsUiModelState. invalid state ${JSON.stringify(state)}`;
+    const exceptionMessage = `state must be of type PhotoCollageModelState or have a field bsuimodel
+      of type PhotoCollageModelState. invalid state ${JSON.stringify(state)}`;
     throw new BsUiError(BsUiErrorType.invalidParameters, exceptionMessage);
   }
 };
 
 /** @internal */
 /** @private */
-export const bsUiModelGetBaseState = (state: BsUiModelState): BsUiModelState  => {
+export const bsUiModelGetBaseState = (state: PhotoCollageModelState): PhotoCollageModelState  => {
   return bsUiModelFilterBaseState(state);
 };

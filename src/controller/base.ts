@@ -1,5 +1,5 @@
 import {
-  BsUiModelState,
+  PhotoCollageModelState,
   createModel,
   PhotoCollageAttributes,
   PhotoCollageItem,
@@ -8,9 +8,6 @@ import {
   PhotoPlayer,
 } from '../type';
 import {
-  // BsUiModelAction,
-  // BsUiModelThunkAction,
-  // BsUiModelDispatch,
   bsUiModelRehydrateModel,
   bsUiModelResetModel,
 } from '../model';
@@ -19,7 +16,7 @@ import {
 // Utilities
 // -----------------------------------------------------------------------
 
-const fetchModelAsync = (): Promise<BsUiModelState> => {
+const fetchModelAsync = (): Promise<PhotoCollageModelState> => {
   return new Promise((resolve) => {
     const photoCollage: PhotoCollageItem[] = [];
     const photoCollageAttributes: PhotoCollageAttributes = {

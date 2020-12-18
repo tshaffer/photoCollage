@@ -5,7 +5,7 @@ import {
   Dispatch,
   ActionCreator,
 } from 'redux';
-import { BsUiModelState } from '../type';
+import { PhotoCollageModelState } from '../type';
 
 // -----------------------------------------------------------------------
 // Actions
@@ -59,7 +59,7 @@ export type BsUiModelActionCreator<T> = ActionCreator<BsUiModelAction<T>>;
 /** @private */
 export type BsUiModelThunkAction<T> = (
   dispatch: BsUiModelDispatch,
-  getState: () => BsUiModelState,
+  getState: () => PhotoCollageModelState,
   extraArgument: undefined,
 ) => T;
 
@@ -79,17 +79,17 @@ export interface BsUiModelBatchAction extends Action {
 /** @internal */
 /** @private */
 export interface RehydrateBsUiModelParams {
-  newBsUiModelState: BsUiModelState;
+  newPhotoCollageModelState: PhotoCollageModelState;
 }
 
 /** @internal */
 /** @private */
 export type RehydrateBsUiModelAction = BsUiModelAction<RehydrateBsUiModelParams>;
-export const bsUiModelRehydrateModel = (bsUiModelState: BsUiModelState): RehydrateBsUiModelAction => {
+export const bsUiModelRehydrateModel = (PhotoCollageModelState: PhotoCollageModelState): RehydrateBsUiModelAction => {
   return {
     type: BSUIMODEL_REHYDRATE,
     payload: {
-      newBsUiModelState: bsUiModelState,
+      newPhotoCollageModelState: PhotoCollageModelState,
     },
   };
 };

@@ -124,6 +124,7 @@ function createWindow() {
       // deploying this electron to production
       // see https://electronjs.org/docs/tutorial/security.
       nodeIntegration: true,
+      nodeIntegrationInWorker: true,
       webSecurity: false
     }
   }); // Attempt to load application from path provided by parent process
@@ -144,7 +145,13 @@ function createWindow() {
 
   mainWindow.loadURL(applicationPath); // Open the DevTools.
 
-  mainWindow.webContents.openDevTools(); // Emitted when the window is closed.
+  mainWindow.webContents.openDevTools();
+  electron__WEBPACK_IMPORTED_MODULE_0__["app"].whenReady().then(() => {
+    electron__WEBPACK_IMPORTED_MODULE_0__["protocol"].registerFileProtocol('file', (request, callback) => {
+      const pathname = request.url.replace('file:///', '');
+      callback(pathname);
+    });
+  }); // Emitted when the window is closed.
 
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -3074,11 +3081,9 @@ function slice (args) {
 
 try {
   var util = __webpack_require__(/*! util */ "util");
-  /* istanbul ignore next */
   if (typeof util.inherits !== 'function') throw '';
   module.exports = util.inherits;
 } catch (e) {
-  /* istanbul ignore next */
   module.exports = __webpack_require__(/*! ./inherits_browser.js */ "./node_modules/inherits/inherits_browser.js");
 }
 
@@ -3095,28 +3100,24 @@ try {
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      })
-    }
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
   };
 } else {
   // old school shim for old browsers
   module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      var TempCtor = function () {}
-      TempCtor.prototype = superCtor.prototype
-      ctor.prototype = new TempCtor()
-      ctor.prototype.constructor = ctor
-    }
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
   }
 }
 

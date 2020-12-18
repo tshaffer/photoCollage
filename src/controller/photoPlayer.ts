@@ -3,7 +3,7 @@ import {
   isNil,
 } from 'lodash';
 
-import * as fs from 'fs-extra';
+import * as fs from 'fs';
 
 import {
   PhotoCollageSpec,
@@ -48,7 +48,7 @@ const getCollagePhoto = (state: PhotoCollageState, landscape: boolean): PhotoInC
       const landscapeOrientation: boolean = photoInCollection.width! >= photoInCollection.height;
       if (landscape === landscapeOrientation) {
         const filePath: string = getFilePathFromPhotoInCollection(getPhotosRootDirectory(state), photoInCollection);
-        if (fs.pathExistsSync(filePath)) {
+        if (fs.existsSync(filePath)) {
           return photoInCollection;
         }
       }

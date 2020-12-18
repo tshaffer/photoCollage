@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
+const size = require('lodash/size');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -109,9 +110,11 @@ module.exports = function (webpackEnv) {
 
   function DtsBundlePlugin(){}
   DtsBundlePlugin.prototype.apply = function (compiler) {
-    compiler.hooks.done.tap('done', function () {
+    compiler.hooks.done.tap('done', function (result) {
       var dts = require('dts-bundle');
-
+      
+      // don't attempt to generate index.d.ts if upstream webpack emits errors
+      if (result && result.compilation && size(result.compilation.errors) === 0)
       dts.bundle({
         name: '[name]',
         main:  paths.appDistTypings + '/index.d.ts',
@@ -123,7 +126,7 @@ module.exports = function (webpackEnv) {
   };
   
   let nodeStubs = {};
-  if (!isElectron) {
+  if (!isElectron && !isStandalone) {
     nodeStubs = {
       module: 'empty',
       dgram: 'empty',
@@ -329,7 +332,7 @@ module.exports = function (webpackEnv) {
       globalObject: 'this',
     },
     optimization: {
-      minimize: isEnvProduction,
+      minimize: false,
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
@@ -827,7 +830,9 @@ module.exports = function (webpackEnv) {
     // Tell webpack to provide empty mocks for them so importing them works.
     node: nodeStubs,
     externals: externals,
-    target: isElectron
+    // assume standlone build is 'electron-like' as this is targeting
+    // support for brightsign roHtmlWidget
+    target: isElectron || isStandalone
       ? 'electron-renderer'
       : 'web',
     // Turn off performance processing because we utilize
