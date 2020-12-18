@@ -23,4 +23,5 @@ dist/
 dist
 
 index.d.ts
+dev/bootstrap.main.js.map
 
