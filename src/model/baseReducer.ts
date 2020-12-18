@@ -6,11 +6,6 @@ import {
 } from 'redux';
 import { isNil } from 'lodash';
 import { PhotoCollageModelState } from '../type';
-import {
-  BSUIMODEL_BATCH,
-  BsUiModelBaseAction,
-  BsUiModelBatchAction,
-} from './baseAction';
 import { photoCollageAttributesReducer } from './photoCollageAttributes';
 import { photoCollageReducer } from './photoCollage';
 import { photoCollageSpecsReducer } from './photoCollageSpecs';
@@ -28,29 +23,13 @@ import { photoPlayerReducer } from './photoPlayer';
 // -----------------------------------------------------------------------
 
 export type BsUiReducer = Reducer<PhotoCollageModelState>;
-const enableBatching = (
-  reduce: (state: PhotoCollageModelState, action: BsUiModelBaseAction | BsUiModelBatchAction) => PhotoCollageModelState,
-): BsUiReducer => {
-  return function batchingReducer(
-    state: PhotoCollageModelState,
-    action: BsUiModelBaseAction | BsUiModelBatchAction,
-  ): PhotoCollageModelState {
-    switch (action.type) {
-      case BSUIMODEL_BATCH:
-        return (action as BsUiModelBatchAction).payload.reduce(batchingReducer, state);
-      default:
-        return reduce(state, action);
-    }
-  };
-};
-
-export const bsUiModelReducer: BsUiReducer = enableBatching(combineReducers<PhotoCollageModelState>({
+export const bsUiModelReducer = combineReducers<PhotoCollageModelState>({
   photoCollage: photoCollageReducer,
   photoCollageAttributes: photoCollageAttributesReducer,
   photoCollageSpecs: photoCollageSpecsReducer,
   photoCollection: photoCollectionReducer,
   photoPlayer: photoPlayerReducer,
-}));
+});
 
 // -----------------------------------------------------------------------
 // Validators
