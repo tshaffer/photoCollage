@@ -1,4 +1,4 @@
-import { PhotoCollageModelBaseAction } from './baseAction';
+import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollageSpec } from '../type';
 
 // ------------------------------------
@@ -10,10 +10,11 @@ export const ADD_PHOTO_COLLAGE_SPECS = 'ADD_PHOTO_COLLAGE_SPECS';
 // Actions
 // ------------------------------------
 type AddPhotosCollageSpecsPayload = PhotoCollageSpec[];
+type AddPhotoCollageSpecsAction = PhotoCollageModelAction<AddPhotosCollageSpecsPayload>;
 
 export const addPhotosCollageSpecs = (
   photoCollageSpecs: PhotoCollageSpec[],
-): PhotoCollageModelBaseAction<AddPhotosCollageSpecsPayload> => {
+): AddPhotoCollageSpecsAction => {
   return {
     type: ADD_PHOTO_COLLAGE_SPECS,
     payload: photoCollageSpecs,
@@ -27,7 +28,7 @@ const initialState: PhotoCollageSpec[] = [];
 
 export const photoCollageSpecsReducer = (
   state: PhotoCollageSpec[] = initialState,
-  action: PhotoCollageModelBaseAction<AddPhotosCollageSpecsPayload>
+  action: AddPhotoCollageSpecsAction,
 ): PhotoCollageSpec[] => {
   switch (action.type) {
     case ADD_PHOTO_COLLAGE_SPECS: {

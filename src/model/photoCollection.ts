@@ -1,4 +1,4 @@
-import { PhotoCollageModelBaseAction } from './baseAction';
+import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollection } from '../type';
 
 // ------------------------------------
@@ -9,11 +9,11 @@ export const SET_PHOTO_COLLECTION = 'SET_PHOTO_COLLECTION';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export type SetPhotoCollectionPayload = PhotoCollection;
+export type SetPhotoCollectionAction = PhotoCollageModelAction<PhotoCollection>;
 
 export const setPhotoCollection = (
   photoCollection: PhotoCollection,
-): PhotoCollageModelBaseAction<SetPhotoCollectionPayload> => {
+): SetPhotoCollectionAction => {
   return {
     type: SET_PHOTO_COLLECTION,
     payload: photoCollection,
@@ -31,7 +31,7 @@ const initialState: PhotoCollection = {
 
 export const photoCollectionReducer = (
   state: PhotoCollection = initialState,
-  action: PhotoCollageModelBaseAction<SetPhotoCollectionPayload>
+  action: SetPhotoCollectionAction
 ): PhotoCollection => {
   switch (action.type) {
     case SET_PHOTO_COLLECTION: {

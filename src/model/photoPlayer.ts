@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { Action } from 'redux';
 import { PhotoInCollageSpec, PhotoPlayer } from '../type';
-import { PhotoCollageModelBaseAction } from './baseAction';
+import { PhotoCollageModelAction } from './baseAction';
 
 // ------------------------------------
 // Constants
@@ -30,22 +30,24 @@ export const stopPhotoPlayback = (
   };
 };
 
-export type SetTimeBetweenUpdatesPayload = number;
+type SetTimeBetweenUpdatesPayload = number;
+type SetTimeBetweenUpdatesAction = PhotoCollageModelAction<SetTimeBetweenUpdatesPayload>;
 
 export const setTimeBetweenUpdates = (
   timeBetweenUpdates: number,
-): PhotoCollageModelBaseAction<SetTimeBetweenUpdatesPayload> => {
+): SetTimeBetweenUpdatesAction => {
   return {
     type: SET_TIME_BETWEEN_UPDATES,
     payload: timeBetweenUpdates,
   };
 };
 
-export type SetPhotoCollageSpecPayload = string;
+type SetPhotoCollageSpecPayload = string;
+type SetPhotoCollageSpecAction = PhotoCollageModelAction<SetPhotoCollageSpecPayload>;
 
 export const setPhotoCollageSpec = (
   photoCollageSpec: string,
-): PhotoCollageModelBaseAction<SetPhotoCollageSpecPayload> => {
+): SetPhotoCollageSpecAction => {
   return {
     type: SET_PHOTO_COLLAGE_SPEC,
     payload: photoCollageSpec,
@@ -53,10 +55,11 @@ export const setPhotoCollageSpec = (
 };
 
 export type SetActivePopulatedPhotoCollagePayload = PhotoInCollageSpec[];
+type SetActivePopulatedCollageAction = PhotoCollageModelAction<SetActivePopulatedPhotoCollagePayload>;
 
 export const setActivePopulatedPhotoCollage = (
   photosInCollage: PhotoInCollageSpec[],
-): PhotoCollageModelBaseAction<SetActivePopulatedPhotoCollagePayload> => {
+): SetActivePopulatedCollageAction => {
   return {
     type: SET_ACTIVE_POPULATED_PHOTO_COLLAGE,
     payload: photosInCollage,
@@ -75,7 +78,8 @@ const initialState: PhotoPlayer = {
 
 export const photoPlayerReducer = (
   state: PhotoPlayer = initialState,
-  action: Action & PhotoCollageModelBaseAction<SetTimeBetweenUpdatesPayload> & PhotoCollageModelBaseAction<SetPhotoCollageSpecPayload>,
+  // action: Action & PhotoCollageModelBaseAction<SetTimeBetweenUpdatesPayload> & PhotoCollageModelBaseAction<SetPhotoCollageSpecPayload>,
+  action: Action & SetTimeBetweenUpdatesAction & SetPhotoCollageSpecAction & SetActivePopulatedCollageAction,
 ): PhotoPlayer => {
   switch (action.type) {
     case START_PHOTO_PLAYBACK: {

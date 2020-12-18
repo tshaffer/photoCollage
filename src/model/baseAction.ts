@@ -2,10 +2,10 @@
 
 import {
   Action,
-  Dispatch,
-  ActionCreator,
+  // Dispatch,
+  // ActionCreator,
 } from 'redux';
-import { PhotoCollageModelState } from '../type';
+// import { PhotoCollageModelState } from '../type';
 
 // -----------------------------------------------------------------------
 // Actions
@@ -13,20 +13,7 @@ import { PhotoCollageModelState } from '../type';
 
 /** @internal */
 /** @private */
-export type BsUiModelDispatch = Dispatch<any>;
-
-/** @internal */
-/** @private */
-export interface PhotoCollageModelBaseAction<T> extends Action {
-  type: string;   // override Any - must be a string
-  payload: T;
-  error?: boolean;
-  meta?: {};
-}
-
-/** @internal */
-/** @private */
-export interface BsUiModelBaseAction extends Action {
+interface PhotoCollageModelBaseAction extends Action {
   type: string;   // override Any - must be a string
   payload: {};
   error?: boolean;
@@ -35,31 +22,9 @@ export interface BsUiModelBaseAction extends Action {
 
 /** @internal */
 /** @private */
-export interface BsUiModelAction<T> extends BsUiModelBaseAction {
-  payload: T;     // override payload with specific parameter type
-}
-
-/** @internal */
-/** @private */
-export type BsUiModelActionCreator<T> = ActionCreator<BsUiModelAction<T>>;
-
-/** @internal */
-/** @private */
-export type BsUiModelThunkAction<T> = (
-  dispatch: BsUiModelDispatch,
-  getState: () => PhotoCollageModelState,
-  extraArgument: undefined,
-) => T;
-
-/** @internal */
-/** @private */
-export interface BsUiModelBatchAction extends Action {
+export interface PhotoCollageModelAction<T> extends PhotoCollageModelBaseAction {
   type: string;
-  payload: BsUiModelBaseAction[];
-}
-
-/** @internal */
-/** @private */
-export interface RehydrateBsUiModelParams {
-  newPhotoCollageModelState: PhotoCollageModelState;
+  payload: T;
+  error?: boolean;
+  meta?: {};
 }

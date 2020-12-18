@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { PhotoCollageModelBaseAction } from './baseAction';
+import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollageItem } from '../type';
 
 // ------------------------------------
@@ -11,10 +11,11 @@ export const ADD_PHOTO_TO_COLLAGE = 'ADD_PHOTO_TO_COLLAGE';
 // Actions
 // ------------------------------------
 type AddPhotoToCollagePayload = PhotoCollageItem;
+type AddPhotoToCollageAction = PhotoCollageModelAction<AddPhotoToCollagePayload>;
 
 export const addPhotoToCollage = (
   photo: PhotoCollageItem,
-): PhotoCollageModelBaseAction<AddPhotoToCollagePayload> => {
+): AddPhotoToCollageAction => {
   return {
     type: ADD_PHOTO_TO_COLLAGE,
     payload: photo,
@@ -28,7 +29,7 @@ const initialState: PhotoCollageItem[] = [];
 
 export const photoCollageReducer = (
   state: PhotoCollageItem[] = initialState,
-  action: PhotoCollageModelBaseAction<AddPhotoToCollagePayload>
+  action: AddPhotoToCollageAction
 ): PhotoCollageItem[] => {
   switch (action.type) {
     case ADD_PHOTO_TO_COLLAGE: {
