@@ -1,7 +1,6 @@
 /** @module Model:base */
 
 import {
-  Reducer,
   combineReducers
 } from 'redux';
 import { isNil } from 'lodash';
@@ -22,8 +21,7 @@ import { photoPlayerReducer } from './photoPlayer';
 // Reducers
 // -----------------------------------------------------------------------
 
-export type BsUiReducer = Reducer<PhotoCollageModelState>;
-export const bsUiModelReducer = combineReducers<PhotoCollageModelState>({
+export const photoCollageModelReducer = combineReducers<PhotoCollageModelState>({
   photoCollage: photoCollageReducer,
   photoCollageAttributes: photoCollageAttributesReducer,
   photoCollageSpecs: photoCollageSpecsReducer,

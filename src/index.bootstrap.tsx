@@ -4,8 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { /*BsUiModelAction,*/ bsUiModelReducer } from './model';
-// import { BsUiModelState } from './type';
+import { photoCollageModelReducer } from './model';
 import { PhotoCollage } from './component';
 import './asset/bootstrap.css';
 import 'normalize.css/normalize.css';
@@ -22,7 +21,7 @@ reportWebVitals();
 // readConfig('/storage/sd/config.env');
 readConfig('/Users/tedshaffer/Documents/Projects/photoCollage/src/config/config.env');
 
-const store = createStore(bsUiModelReducer, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(photoCollageModelReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 store.dispatch(init());
 
