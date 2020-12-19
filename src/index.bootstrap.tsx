@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { photoCollageModelReducer } from './model';
-import { PhotoCollage } from './component';
+import PhotoCollage from './component/PhotoCollage';
 import './asset/bootstrap.css';
 import 'normalize.css/normalize.css';
 import 'flexboxgrid/dist/flexboxgrid.min.css';

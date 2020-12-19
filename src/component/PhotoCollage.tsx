@@ -2,12 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Modal from 'react-modal';
+// import PropTypes from "prop-types";
 
 import { isNil } from 'lodash';
 
 import {
   PhotoCollageState,
   DisplayedPhoto,
+  // PhotoInCollageSpec,
 } from '../type';
 import { PhotoCollageCanvas } from './PhotoCollageCanvas';
 
@@ -34,51 +36,60 @@ export interface PhotoCollageProps {
 // Component
 // -----------------------------------------------------------------------
 
-class PhotoCollageComponent extends React.Component<
-  PhotoCollageProps,
-  PhotoCollageComponentState
-  > {
+// SimpleDialog.propTypes = {
+//   onClose: PropTypes.func.isRequired,
+//   open: PropTypes.bool.isRequired,
+//   selectedValue: PropTypes.string.isRequired,
+// };
 
-  constructor(props: any) {
-    super(props);
+const PhotoCollage = (props: PhotoCollageProps) => {
 
-    this.state = {
-      showModal: false,
-      selectedPhoto: null,
-    };
+  // let tmpPhotoInCollageSpec: PhotoInCollageSpec = {
+  //   x: 0,
+  //   y: 0,
+  //   width: 0,
+  //   height: 0,
+  // };
+  
+  // let tmpSelectedPhoto: DisplayedPhoto = {
+  //   x: 0,
+  //   y: 0,
+  //   width: 0,
+  //   height: 0,
+  //   photoSpec: tmpPhotoInCollageSpec,
+  // };
 
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.handleCloseModalResumePlayback = this.handleCloseModalResumePlayback.bind(this);
-    this.handleSelectPhoto = this.handleSelectPhoto.bind(this);
+  const [_showModal, setShowModal] = React.useState(false);
+  const [_selectedPhoto, setSelectedPhoto] = React.useState<DisplayedPhoto | undefined>(undefined);
+
+  // const handleOpenModal = () => {
+  //   setShowModal(true);
+  // }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   }
 
-  componentDidMount() {
-    console.log('PhotoCollage componentDidMount invoked');
+  const handleCloseModalResumePlayback = () => {
+    setShowModal(false);
+    props.onStartPlayback();
   }
 
-  handleOpenModal() {
-    this.setState({ showModal: true });
+  const handleSelectPhoto = (selectedPhoto: DisplayedPhoto) => {
+    Modal.setAppElement('#collageCanvas');
+    setSelectedPhoto(selectedPhoto);
+    setShowModal(true);
   }
 
-  handleCloseModal() {
-    this.setState({ showModal: false });
-  }
-
-  handleCloseModalResumePlayback() {
-    this.setState({ showModal: false });
-    this.props.onStartPlayback();
-  }
-
-  renderDialog(): any {
-    if (isNil(this.state.selectedPhoto)) {
+  const renderDialog = () => {
+    if (isNil(_selectedPhoto)) {
       return (
         <div>
-          <button onClick={this.handleCloseModal}>Close Modal</button>
+          <button onClick={handleCloseModal}>Close Modal</button>
         </div>
       );
     }
-    const selectedPhoto: DisplayedPhoto = this.state.selectedPhoto;
+    const selectedPhoto: DisplayedPhoto = _selectedPhoto;
 
     // TEDTODO - are width and height scaled values vs. file values?
     return (
@@ -90,12 +101,12 @@ class PhotoCollageComponent extends React.Component<
         <p>{selectedPhoto.width}</p>
         <p>Height</p>
         <p>{selectedPhoto.height}</p>
-        <button onClick={this.handleCloseModalResumePlayback}>Resume</button>
+        <button onClick={handleCloseModalResumePlayback}>Resume</button>
         <button
           style={{
             marginLeft: '16px'
           }}
-          onClick={this.handleCloseModal}
+          onClick={handleCloseModal}
         >
           Close
         </button>
@@ -103,62 +114,53 @@ class PhotoCollageComponent extends React.Component<
     );
   }
 
-  handleSelectPhoto(selectedPhoto: any) {
-    Modal.setAppElement('#collageCanvas');
-    this.setState({
-      selectedPhoto,
-      showModal: true,
-    });
-  }
-
-  render() {
-
-    return (
-      <div>
-        <PhotoCollageCanvas
-          onSelectPhoto={this.handleSelectPhoto}
-        />
-        <Modal
-          isOpen={this.state.showModal}
-          contentLabel='Minimal Modal Example'
-          style={{
-            overlay: {
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 100,
-              bottom: 200,
-              backgroundColor: 'rgba(255, 255, 255, 0.75)'
-            },
-            content: {
-              position: 'absolute',
-              top: '40px',
-              left: '40px',
-              right: '40px',
-              bottom: '40px',
-              border: '1px solid #ccc',
-              background: '#fff',
-              overflow: 'auto',
-              WebkitOverflowScrolling: 'touch',
-              borderRadius: '4px',
-              outline: 'none',
-              padding: '20px'
-            }
-          }}
-        >
-          {this.renderDialog()}
-        </Modal>
+  return (
+    <div>
+      <PhotoCollageCanvas
+        onSelectPhoto={handleSelectPhoto}
+      />
+      <Modal
+        isOpen={_showModal}
+        contentLabel='Minimal Modal Example'
+        style={{
+          overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 100,
+            bottom: 200,
+            backgroundColor: 'rgba(255, 255, 255, 0.75)'
+          },
+          content: {
+            position: 'absolute',
+            top: '40px',
+            left: '40px',
+            right: '40px',
+            bottom: '40px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            overflow: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            borderRadius: '4px',
+            outline: 'none',
+            padding: '20px'
+          }
+        }}
+      >
+        {renderDialog()}
+      </Modal>
         pizza
-      </div>
-    );
-  }
+    </div>
+  );
+
 }
 
-// -----------------------------------------------------------------------
-// Container
-// -----------------------------------------------------------------------
+// PhotoCollage.propTypes = {
+//   _showModal: PropTypes.bool.isRequired,
+//   _selectedPhoto: PropTypes.object.isRequired,
+// }
 
-function mapStateToProps(state: PhotoCollageState): Partial<PhotoCollageProps> {
+function mapStateToProps(state: PhotoCollageState, ownProps: any) {
   return {
   };
 }
@@ -169,4 +171,141 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export const PhotoCollage = connect(mapStateToProps, mapDispatchToProps)(PhotoCollageComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(PhotoCollage);
+
+// class PhotoCollageComponent extends React.Component<
+//   PhotoCollageProps,
+//   PhotoCollageComponentState
+//   > {
+
+//   constructor(props: any) {
+//     super(props);
+
+//     this.state = {
+//       showModal: false,
+//       selectedPhoto: null,
+//     };
+
+//     this.handleOpenModal = this.handleOpenModal.bind(this);
+//     this.handleCloseModal = this.handleCloseModal.bind(this);
+//     this.handleCloseModalResumePlayback = this.handleCloseModalResumePlayback.bind(this);
+//     this.handleSelectPhoto = this.handleSelectPhoto.bind(this);
+//   }
+
+//   componentDidMount() {
+//     console.log('PhotoCollage componentDidMount invoked');
+//   }
+
+//   handleOpenModal() {
+//     this.setState({ showModal: true });
+//   }
+
+//   handleCloseModal() {
+//     this.setState({ showModal: false });
+//   }
+
+//   handleCloseModalResumePlayback() {
+//     this.setState({ showModal: false });
+//     this.props.onStartPlayback();
+//   }
+
+//   renderDialog(): any {
+//     if (isNil(this.state.selectedPhoto)) {
+//       return (
+//         <div>
+//           <button onClick={this.handleCloseModal}>Close Modal</button>
+//         </div>
+//       );
+//     }
+//     const selectedPhoto: DisplayedPhoto = this.state.selectedPhoto;
+
+//     // TEDTODO - are width and height scaled values vs. file values?
+//     return (
+//       <div>
+//         <p>Selected photo:</p>
+//         <p>{selectedPhoto.photoSpec.fileName}</p>
+//         <p>{selectedPhoto.photoSpec.filePath}</p>
+//         <p>Width</p>
+//         <p>{selectedPhoto.width}</p>
+//         <p>Height</p>
+//         <p>{selectedPhoto.height}</p>
+//         <button onClick={this.handleCloseModalResumePlayback}>Resume</button>
+//         <button
+//           style={{
+//             marginLeft: '16px'
+//           }}
+//           onClick={this.handleCloseModal}
+//         >
+//           Close
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   handleSelectPhoto(selectedPhoto: any) {
+//     Modal.setAppElement('#collageCanvas');
+//     this.setState({
+//       selectedPhoto,
+//       showModal: true,
+//     });
+//   }
+
+//   render() {
+
+//     return (
+//       <div>
+//         <PhotoCollageCanvas
+//           onSelectPhoto={this.handleSelectPhoto}
+//         />
+//         <Modal
+//           isOpen={this.state.showModal}
+//           contentLabel='Minimal Modal Example'
+//           style={{
+//             overlay: {
+//               position: 'fixed',
+//               top: 0,
+//               left: 0,
+//               right: 100,
+//               bottom: 200,
+//               backgroundColor: 'rgba(255, 255, 255, 0.75)'
+//             },
+//             content: {
+//               position: 'absolute',
+//               top: '40px',
+//               left: '40px',
+//               right: '40px',
+//               bottom: '40px',
+//               border: '1px solid #ccc',
+//               background: '#fff',
+//               overflow: 'auto',
+//               WebkitOverflowScrolling: 'touch',
+//               borderRadius: '4px',
+//               outline: 'none',
+//               padding: '20px'
+//             }
+//           }}
+//         >
+//           {this.renderDialog()}
+//         </Modal>
+//         pizza
+//       </div>
+//     );
+//   }
+// }
+
+// // -----------------------------------------------------------------------
+// // Container
+// // -----------------------------------------------------------------------
+
+// function mapStateToProps(state: PhotoCollageState): Partial<PhotoCollageProps> {
+//   return {
+//   };
+// }
+
+// const mapDispatchToProps = (dispatch: any) => {
+//   return bindActionCreators({
+//     onStartPlayback: startPlayback,
+//   }, dispatch);
+// };
+
+// // export const PhotoCollage = connect(mapStateToProps, mapDispatchToProps)(PhotoCollageComponent);

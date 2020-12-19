@@ -1,2 +1,2 @@
-export { PhotoCollage } from './PhotoCollage';
+export * from './PhotoCollage';
 export { PhotoCollageCanvas } from './PhotoCollageCanvas';
