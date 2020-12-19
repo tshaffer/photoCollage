@@ -8,6 +8,12 @@
   "browser": {
     "./dist/electron/main.bsuit.js": "./dist/browser/main.bsuit.js"
   },
+  "dependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "isomorphic-path": "^2.0.1",
+    "react-modal": "^3.12.1"
+  },
   "devDependencies": {
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
@@ -16,6 +22,7 @@
     "@types/fs-extra": "^9.0.1",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.162",
+    "@types/material-ui": "^0.21.8",
     "@types/node": "^12.19.2",
     "@types/react": "^16.9.54",
     "@types/react-dom": "^16.9.9",
@@ -186,9 +193,5 @@
     "presets": [
       "react-app"
     ]
-  },
-  "dependencies": {
-    "isomorphic-path": "^2.0.1",
-    "react-modal": "^3.12.1"
   }
 }
