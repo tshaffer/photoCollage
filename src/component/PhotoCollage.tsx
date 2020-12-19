@@ -2,16 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Modal from 'react-modal';
-// import PropTypes from "prop-types";
 
 import { isNil } from 'lodash';
 
 import {
   PhotoCollageState,
   DisplayedPhoto,
-  // PhotoInCollageSpec,
 } from '../type';
-import { PhotoCollageCanvas } from './PhotoCollageCanvas';
+import PhotoCollageCanvas from './PhotoCollageCanvas';
 
 import {
   startPlayback,
@@ -36,35 +34,10 @@ export interface PhotoCollageProps {
 // Component
 // -----------------------------------------------------------------------
 
-// SimpleDialog.propTypes = {
-//   onClose: PropTypes.func.isRequired,
-//   open: PropTypes.bool.isRequired,
-//   selectedValue: PropTypes.string.isRequired,
-// };
-
 const PhotoCollage = (props: PhotoCollageProps) => {
-
-  // let tmpPhotoInCollageSpec: PhotoInCollageSpec = {
-  //   x: 0,
-  //   y: 0,
-  //   width: 0,
-  //   height: 0,
-  // };
-  
-  // let tmpSelectedPhoto: DisplayedPhoto = {
-  //   x: 0,
-  //   y: 0,
-  //   width: 0,
-  //   height: 0,
-  //   photoSpec: tmpPhotoInCollageSpec,
-  // };
 
   const [_showModal, setShowModal] = React.useState(false);
   const [_selectedPhoto, setSelectedPhoto] = React.useState<DisplayedPhoto | undefined>(undefined);
-
-  // const handleOpenModal = () => {
-  //   setShowModal(true);
-  // }
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -154,11 +127,6 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   );
 
 }
-
-// PhotoCollage.propTypes = {
-//   _showModal: PropTypes.bool.isRequired,
-//   _selectedPhoto: PropTypes.object.isRequired,
-// }
 
 function mapStateToProps(state: PhotoCollageState, ownProps: any) {
   return {
