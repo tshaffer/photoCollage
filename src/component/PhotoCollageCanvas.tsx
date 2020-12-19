@@ -54,18 +54,24 @@ export interface PhotoCollageCanvasProps extends PhotoCollageCanvasPropsFromPare
 // Component
 // -----------------------------------------------------------------------
 
-let canvasRef: any;
-let ctx: any;
+let canvasRef: any = null;
+let ctx: any = null;
 let photoImages: DisplayedPhoto[] = [];
 
 const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
-  React.useEffect(() => {
-    canvasRef = null;
-    ctx = null;
-    photoImages = [];
-    props.onStartPlayback();
-  }, []);
+  // React.useEffect(() => {
+  //   canvasRef = null;
+  //   ctx = null;
+  //   photoImages = [];
+  //   props.onStartPlayback();
+  // }, []);
+
+  // React.useEffect(() =>
+  //   props.onStartPlayback()
+  //   , []);
+
+  React.useEffect(props.onStartPlayback, []);
 
   const setCanvasRef = (element: any) => {
     if (!isNil(element)) {
