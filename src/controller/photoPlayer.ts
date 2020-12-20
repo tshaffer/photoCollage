@@ -41,7 +41,7 @@ const getCollagePhoto = (state: PhotoCollageState, landscape: boolean): PhotoInC
 
   const numPhotos = photosInCollection.length;
 
-  while (true) {
+  for (; ;) {
     const randomInt = getRandomInt(numPhotos);
     const photoInCollection: PhotoInCollection = photosInCollection[randomInt];
     if (!isNil(photoInCollection.height)) {

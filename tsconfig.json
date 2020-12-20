@@ -16,7 +16,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": false
   },
   "files": ["./src/react-app-env.d.ts", "./src/mock/index.d.ts"],
   "exclude": [
