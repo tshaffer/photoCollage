@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollageAttributes } from '../type';
 

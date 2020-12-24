@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { cloneDeep } from 'lodash';
 import { Action } from 'redux';
 import { PhotoInCollageSpec, PhotoPlayer } from '../type';
