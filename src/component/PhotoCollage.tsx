@@ -47,12 +47,22 @@ const useStyles = makeStyles({
     height: '1080px',
   },
   photoCollageDiv: {
-    // height: '50%',
-    height: '1000px',
+    height: '1020px',   // not clear that this is relevant / used
   },
+  /*  
+  old approach
+     position: 'absolute',
+     margin: 'auto',
+     width: '200px',
+     bottom: 0,
+  omitted
+    -webkit-transform: 'translateX(-50%)',
+  */
   toolbarDiv: {
     position: 'absolute',
-    bottom: 0,
+    left: '50%',
+    bottom: '0px',
+    transform: 'translateX(-50%)',
   },
 });
 
