@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollageAttributes } from '../type';
 
@@ -18,7 +19,7 @@ type SetPhotosRootDirectoryAction = PhotoCollageModelAction<SetPhotosRootDirecto
 export const setPhotosRootDirectory = (
   photosRootDirectory: string,
 ): SetPhotosRootDirectoryAction => {
-    return {
+  return {
     type: SET_PHOTOS_ROOT_DIRECTORY,
     payload: {
       photosRootDirectory,

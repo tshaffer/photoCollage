@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { cloneDeep } from 'lodash';
 import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollageItem } from '../type';

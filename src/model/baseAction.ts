@@ -15,7 +15,7 @@ import {
 /** @private */
 interface PhotoCollageModelBaseAction extends Action {
   type: string;   // override Any - must be a string
-  payload: {};
+  payload: unknown;
   error?: boolean;
   meta?: {};
 }

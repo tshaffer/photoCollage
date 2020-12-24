@@ -1,6 +1,6 @@
 import { 
   PhotoCollageSpec, 
- } from '../type';
+} from '../type';
 import { photoCollageConfig } from '../config';
 
 import { addPhotosCollageSpecs, setPhotoCollageSpecIndex, setPhotosRootDirectory } from '../model';

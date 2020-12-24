@@ -95,7 +95,7 @@ const timeoutHandler = (dispatch: any) => {
 };
 
 export const startPlayback = () => {
-  return ((dispatch: any, getState: any) => {
+  return ((dispatch: any, getState: any): any => {
     dispatch(startPhotoPlayback());
     dispatch(getNextCollagePhotos());
     playbackTimer = setInterval(timeoutHandler, getTimeBetweenUpdates(getState()) * 1000, dispatch);
@@ -103,7 +103,7 @@ export const startPlayback = () => {
 };
 
 export const stopPlayback = () => {
-  return ((dispatch: any, getState: any) => {
+  return ((dispatch: any, getState: any): any => {
     dispatch(stopPhotoPlayback());
     if (!isNil(playbackTimer)) {
       clearInterval(playbackTimer);

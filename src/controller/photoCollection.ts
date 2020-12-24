@@ -17,7 +17,7 @@ import { setPhotoCollection } from '../model';
 
 import { photoCollageConfig } from '../config';
 
-export function readPhotoCollection() {
+export function readPhotoCollection(): any {
   console.log('readPhotoCollection invoked');
 
   return ((dispatch: any, getState: any) => {

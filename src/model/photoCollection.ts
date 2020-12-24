@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { PhotoCollageModelAction } from './baseAction';
 import { PhotoCollection } from '../type';
 
