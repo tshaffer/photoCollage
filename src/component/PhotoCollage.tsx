@@ -30,12 +30,14 @@ import PhotoCollageCanvas from './PhotoCollageCanvas';
 
 import {
   startPlayback,
+  stopPlayback,
 } from '../controller';
+import { getPlaybackActive } from '../selector';
 
-export interface PhotoCollageComponentState {
-  showModal: boolean;
-  selectedPhoto: DisplayedPhoto | null;
-}
+// TEDTODO - should there be a component state?
+// export interface PhotoCollageComponentState {
+//   selectedPhoto: DisplayedPhoto | null;
+// }
 
 // -----------------------------------------------------------------------
 // Types
@@ -44,7 +46,9 @@ export interface PhotoCollageComponentState {
 /** @internal */
 /** @private */
 export interface PhotoCollageProps {
+  playbackActive: boolean;
   onStartPlayback: () => any;
+  onStopPlayback: () => any;
 }
 
 // -----------------------------------------------------------------------
@@ -148,10 +152,15 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 
   const handlePlay = () => {
     console.log('handlePlay invoked');
+    setOpen(false);
+    props.onStartPlayback();
   };
 
   const handlePause = () => {
     console.log('handlePause invoked');
+    setSelectedPhoto(undefined);
+    setOpen(false);
+    props.onStopPlayback();
   };
 
   const renderDialog = () => {
@@ -171,6 +180,38 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 
   };
 
+  const getPauseOrPlaybackIcon = () => {
+    console.log('getPauseOrPlaybackIcon');
+    console.log(props.playbackActive);
+
+    if (props.playbackActive) {
+      return (
+        <IconButton
+          id={'0'}
+          onClick={handlePause}>
+          <PauseCircleFilled />
+        </IconButton>
+      );
+    }
+    else {
+      return (
+        <IconButton
+          id={'1'}
+          onClick={handlePlay}>
+          <PlayArrow />
+        </IconButton>
+      );
+    }
+  };
+
+  const renderToolbar = () => {
+    return (
+      <div className={classes.toolbarDiv}>
+        {getPauseOrPlaybackIcon()}
+      </div>
+    );
+  };
+
   return (
     <div className={classes.parentDiv}>
       <div className={classes.photoCollageDiv}>
@@ -179,32 +220,22 @@ const PhotoCollage = (props: PhotoCollageProps) => {
         />
         {renderDialog()}
       </div >
-      <div className={classes.toolbarDiv}>
-        <IconButton
-          id={'0'}
-          onClick={handlePlay}>
-          <PlayArrow />
-        </IconButton>
-        <IconButton
-          id={'1'}
-          onClick={handlePause}>
-          <PauseCircleFilled />
-        </IconButton>
-
-      </div>
+      {renderToolbar()}
     </div>
   );
 
 };
 
-function mapStateToProps(state: PhotoCollageState, ownProps: any) {
+function mapStateToProps(state: PhotoCollageState, ownProps: any): Partial<PhotoCollageProps> {
   return {
+    playbackActive: getPlaybackActive(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onStartPlayback: startPlayback,
+    onStopPlayback: stopPlayback,
   }, dispatch);
 };
 
