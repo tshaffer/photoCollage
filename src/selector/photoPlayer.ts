@@ -6,6 +6,10 @@ export const getPlaybackActive = (state: PhotoCollageState): boolean => {
   return state.photoPlayer.playbackActive;
 };
 
+export const getFullScreenDisplay = (state: PhotoCollageState): boolean => {
+  return state.photoPlayer.fullScreenDisplay;
+};
+
 export const getTimeBetweenUpdates = (state: PhotoCollageState): number => {
   return state.photoPlayer.timeBetweenUpdates;
 };

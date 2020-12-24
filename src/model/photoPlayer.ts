@@ -8,6 +8,8 @@ import { PhotoCollageModelAction } from './baseAction';
 // ------------------------------------
 const START_PHOTO_PLAYBACK = 'START_PHOTO_PLAYBACK';
 const STOP_PHOTO_PLAYBACK = 'STOP_PHOTO_PLAYBACK';
+const ENTER_FULL_SCREEN_DISPLAY = 'ENTER_FULL_SCREEN_PLAYBACK';
+const EXIT_FULL_SCREEN_DISPLAY = 'EXIT_FULL_SCREEN_PLAYBACK';
 const SET_TIME_BETWEEN_UPDATES = 'SET_TIME_BETWEEN_UPDATES';
 const SET_PHOTO_COLLAGE_SPEC = 'SET_PHOTO_COLLAGE_SPEC';
 const SET_ACTIVE_POPULATED_PHOTO_COLLAGE = 'SET_ACTIVE_POPULATED_PHOTO_COLLAGE';
@@ -27,6 +29,20 @@ export const stopPhotoPlayback = (
 ): Action => {
   return {
     type: STOP_PHOTO_PLAYBACK,
+  };
+};
+
+export const enterFullScreenDisplay = (
+): Action => {
+  return {
+    type: ENTER_FULL_SCREEN_DISPLAY,
+  };
+};
+
+export const exitFullScreenDisplay = (
+): Action => {
+  return {
+    type: EXIT_FULL_SCREEN_DISPLAY,
   };
 };
 
@@ -71,6 +87,7 @@ export const setActivePopulatedPhotoCollage = (
 // ------------------------------------
 const initialState: PhotoPlayer = {
   playbackActive: false,
+  fullScreenDisplay: false,
   timeBetweenUpdates: 5,
   photoCollageSpec: '',
   photosInCollage: [],
@@ -91,6 +108,18 @@ export const photoPlayerReducer = (
       return {
         ...state,
         playbackActive: false,
+      };
+    }
+    case ENTER_FULL_SCREEN_DISPLAY: {
+      return {
+        ...state,
+        fullScreenDisplay: true,
+      };
+    }
+    case EXIT_FULL_SCREEN_DISPLAY: {
+      return {
+        ...state,
+        fullScreenDisplay: false,
       };
     }
     case SET_TIME_BETWEEN_UPDATES: {

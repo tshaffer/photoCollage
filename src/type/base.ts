@@ -94,6 +94,7 @@ export interface PhotoInCollection {
 
 export interface PhotoPlayer {
   playbackActive: boolean;
+  fullScreenDisplay: boolean;
   timeBetweenUpdates: number;
   photoCollageSpec: string;
   photosInCollage: PhotoInCollageSpec[];

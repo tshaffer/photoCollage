@@ -14,8 +14,8 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import PauseCircleFilled from '@material-ui/icons/PauseCircleFilled';
 import Replay from '@material-ui/icons/Replay';
-import FullScreen from '@material-ui/icons/FullScreen';
-import FullScreenExit from '@material-ui/icons/FullScreenExit';
+import Fullscreen from '@material-ui/icons/Fullscreen';
+import FullscreenExit from '@material-ui/icons/FullscreenExit';
 import Info from '@material-ui/icons/Info';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -32,12 +32,10 @@ import {
   startPlayback,
   stopPlayback,
 } from '../controller';
-import { getPlaybackActive } from '../selector';
-
-// TEDTODO - should there be a component state?
-// export interface PhotoCollageComponentState {
-//   selectedPhoto: DisplayedPhoto | null;
-// }
+import {
+  getPlaybackActive,
+  getFullScreenDisplay,
+} from '../selector';
 
 // -----------------------------------------------------------------------
 // Types
@@ -47,6 +45,7 @@ import { getPlaybackActive } from '../selector';
 /** @private */
 export interface PhotoCollageProps {
   playbackActive: boolean;
+  fullScreenDisplay: boolean;
   onStartPlayback: () => any;
   onStopPlayback: () => any;
 }
@@ -164,6 +163,18 @@ const PhotoCollage = (props: PhotoCollageProps) => {
     props.onStopPlayback();
   };
 
+  const handleReplay = () => {
+    console.log('handleReplay invoked');
+  };
+
+  const handleDisplayFullScreen = () => {
+    console.log('handleDisplayFullScreen invoked');
+  };
+
+  const handleExitFullScreenDisplay = () => {
+    console.log('handleExitFullScreenDisplay invoked');
+  };
+
   const renderDialog = () => {
 
     const selectedPhoto: DisplayedPhoto | undefined = _selectedPhoto;
@@ -205,10 +216,41 @@ const PhotoCollage = (props: PhotoCollageProps) => {
     }
   };
 
+  const getFullScreenOrFullScreenExitIcon = () => {
+
+    console.log('getFullScreenOrFullScreenExitIcon');
+    console.log(props.fullScreenDisplay);
+
+    if (props.fullScreenDisplay) {
+      return (
+        <IconButton
+          id={'fullScreenExit'}
+          onClick={handleExitFullScreenDisplay}>
+          <FullscreenExit />
+        </IconButton>
+      );
+    }
+    else {
+      return (
+        <IconButton
+          id={'fullScreenDisplay'}
+          onClick={handleDisplayFullScreen}>
+          <Fullscreen />
+        </IconButton>
+      );
+    }
+  };
+
   const renderToolbar = () => {
     return (
       <div className={classes.toolbarDiv}>
+        <IconButton
+          id={'replay'}
+          onClick={handleReplay}>
+          <Replay />
+        </IconButton>
         {getPauseOrPlaybackIcon()}
+        {getFullScreenOrFullScreenExitIcon()}
       </div>
     );
   };
@@ -230,6 +272,7 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 function mapStateToProps(state: PhotoCollageState, ownProps: any): Partial<PhotoCollageProps> {
   return {
     playbackActive: getPlaybackActive(state),
+    fullScreenDisplay: getFullScreenDisplay(state),
   };
 }
 
