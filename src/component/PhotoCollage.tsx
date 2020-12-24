@@ -10,6 +10,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import IconButton from '@material-ui/core/IconButton';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+import PauseCircleFilled from '@material-ui/icons/PauseCircleFilled';
+import Replay from '@material-ui/icons/Replay';
+import FullScreen from '@material-ui/icons/FullScreen';
+import FullScreenExit from '@material-ui/icons/FullScreenExit';
+import Info from '@material-ui/icons/Info';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+
 import { isNil } from 'lodash';
 
 import {
@@ -136,6 +146,14 @@ const PhotoCollage = (props: PhotoCollageProps) => {
     setOpen(true);
   };
 
+  const handlePlay = () => {
+    console.log('handlePlay invoked');
+  };
+
+  const handlePause = () => {
+    console.log('handlePause invoked');
+  };
+
   const renderDialog = () => {
 
     const selectedPhoto: DisplayedPhoto | undefined = _selectedPhoto;
@@ -162,7 +180,17 @@ const PhotoCollage = (props: PhotoCollageProps) => {
         {renderDialog()}
       </div >
       <div className={classes.toolbarDiv}>
-        this is a long flibbet
+        <IconButton
+          id={'0'}
+          onClick={handlePlay}>
+          <PlayArrow />
+        </IconButton>
+        <IconButton
+          id={'1'}
+          onClick={handlePause}>
+          <PauseCircleFilled />
+        </IconButton>
+
       </div>
     </div>
   );
