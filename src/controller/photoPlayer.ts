@@ -16,6 +16,8 @@ import {
   setPhotoCollageSpec as setPhotoCollageUniqueId,
   startPhotoPlayback,
   stopPhotoPlayback,
+  enterFullScreenDisplay,
+  exitFullScreenDisplay,
 } from '../model';
 import {
   getTimeBetweenUpdates,
@@ -108,5 +110,19 @@ export const stopPlayback = () => {
     if (!isNil(playbackTimer)) {
       clearInterval(playbackTimer);
     }
+  });
+};
+
+// TODO - naming consistency
+export const enterFullScreenPlayback = () => {
+  return ((dispatch: any, getState: any): any => {
+    dispatch(enterFullScreenDisplay());
+  });
+};
+
+// TODO - naming consistency
+export const exitFullScreenPlayback = () => {
+  return ((dispatch: any, getState: any): any => {
+    dispatch(exitFullScreenDisplay());
   });
 };

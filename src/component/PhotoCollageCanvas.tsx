@@ -19,6 +19,7 @@ import {
 } from '../controller';
 
 import {
+  getFullScreenDisplay,
   getActivePhotoCollageSpec,
   getPhotoCollection,
   getPhotosInCollage
@@ -43,6 +44,7 @@ export interface PhotoCollageCanvasComponentState {
 /** @internal */
 /** @private */
 export interface PhotoCollageCanvasProps extends PhotoCollageCanvasPropsFromParent {
+  fullScreenDisplay: boolean;
   photoCollection: PhotoCollection;
   photoCollageSpec: PhotoCollageSpec | null;
   photosInCollage: PhotoInCollageSpec[];
@@ -152,6 +154,33 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     }
   };
 
+  const renderFullScreenPhoto = () => {
+
+    const photosInCollage: PhotoInCollageSpec[] = props.photosInCollage;
+    if (photosInCollage.length === 0) {
+      return;
+    }
+
+    const filePath = photosInCollage[0].filePath!;
+
+    const screenCoordinates = getScaledCoordinates(0, 0, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight);
+
+    photoImages.push({
+      x: 0,
+      y: 0,
+      width: screenCoordinates.width,
+      height: screenCoordinates.height,
+      photoSpec: photosInCollage[0],
+    });
+
+    renderPhoto(
+      'file:///' + filePath,
+      screenCoordinates.x,
+      screenCoordinates.y,
+      screenCoordinates.width,
+      screenCoordinates.height);
+  };
+
   const renderPhotoCollage = () => {
     if (isNil(props.photoCollageSpec) ||
       isNil(props.photoCollection) ||
@@ -166,7 +195,11 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     const context = ctx;
     context.imageSmoothingEnabled = false;
     context.clearRect(0, 0, canvasRef.width, canvasRef.height);
-    renderPhotoCollage();
+    if (props.fullScreenDisplay) {
+      renderFullScreenPhoto();
+    } else {
+      renderPhotoCollage();
+    }
   }
 
   return (
@@ -184,6 +217,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
 function mapStateToProps(state: PhotoCollageState, ownProps: PhotoCollageCanvasPropsFromParent): Partial<PhotoCollageCanvasProps> {
   return {
+    fullScreenDisplay: getFullScreenDisplay(state),
     photoCollection: getPhotoCollection(state),
     photoCollageSpec: getActivePhotoCollageSpec(state),
     photosInCollage: getPhotosInCollage(state),

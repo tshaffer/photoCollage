@@ -31,6 +31,8 @@ import PhotoCollageCanvas from './PhotoCollageCanvas';
 import {
   startPlayback,
   stopPlayback,
+  enterFullScreenPlayback,
+  exitFullScreenPlayback,
 } from '../controller';
 import {
   getPlaybackActive,
@@ -48,6 +50,8 @@ export interface PhotoCollageProps {
   fullScreenDisplay: boolean;
   onStartPlayback: () => any;
   onStopPlayback: () => any;
+  onEnterFullScreenPlayback: () => any;
+  onExitFullScreenPlayback: () => any;
 }
 
 // -----------------------------------------------------------------------
@@ -169,10 +173,13 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 
   const handleDisplayFullScreen = () => {
     console.log('handleDisplayFullScreen invoked');
+    props.onEnterFullScreenPlayback();
+
   };
 
   const handleExitFullScreenDisplay = () => {
     console.log('handleExitFullScreenDisplay invoked');
+    props.onExitFullScreenPlayback();
   };
 
   const renderDialog = () => {
@@ -280,6 +287,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onStartPlayback: startPlayback,
     onStopPlayback: stopPlayback,
+    onEnterFullScreenPlayback: enterFullScreenPlayback,
+    onExitFullScreenPlayback: exitFullScreenPlayback,
   }, dispatch);
 };
 
