@@ -58,10 +58,11 @@ export interface PhotoCollageProps {
 const useStyles = makeStyles({
   parentDiv: {
     position: 'relative',
-    height: '1080px',
+    // height: '1080px',
+    height: '100%',
   },
   photoCollageDiv: {
-    height: '1020px',   // not clear that this is relevant / used
+    // height: '1020px',   // not clear that this is relevant / used / required
   },
   /*  
   old approach

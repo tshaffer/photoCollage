@@ -25,9 +25,15 @@ const store = createStore(photoCollageModelReducer, composeWithDevTools(applyMid
 
 store.dispatch(init());
 
+const divStyle = {
+  height: '1080px',
+};
+
 ReactDOM.render(
   <Provider store={store}>
-    <PhotoCollage />
+    <div style={divStyle}>
+      <PhotoCollage />
+    </div>
   </Provider>,
   document.getElementById('root') as HTMLElement
 );
