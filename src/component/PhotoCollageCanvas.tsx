@@ -60,17 +60,6 @@ let photoImages: DisplayedPhoto[] = [];
 
 const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
-  // React.useEffect(() => {
-  //   canvasRef = null;
-  //   ctx = null;
-  //   photoImages = [];
-  //   props.onStartPlayback();
-  // }, []);
-
-  // React.useEffect(() =>
-  //   props.onStartPlayback()
-  //   , []);
-
   React.useEffect(props.onStartPlayback, []);
 
   const setCanvasRef = (element: any) => {
@@ -78,7 +67,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       canvasRef = element;
       ctx = element.getContext('2d');
     }
-  }
+  };
 
   const renderPhoto = (filePath: string, x: number, y: number, width: number, height: number) => {
     const photo = new Image();
@@ -86,25 +75,25 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       scaleToFit(photo, x, y, width, height);
     };
     photo.src = filePath;
-  }
+  };
 
   const scaleToFit = (photo: any, xOnCanvas: number, yOnCanvas: number, widthOnCanvas: number, heightOnCanvas: number) => {
     const scale = Math.min(widthOnCanvas / photo.width, heightOnCanvas / photo.height);
     const x = (widthOnCanvas / 2) - (photo.width / 2) * scale;
     const y = (heightOnCanvas / 2) - (photo.height / 2) * scale;
     ctx.drawImage(photo, x + xOnCanvas, y + yOnCanvas, photo.width * scale, photo.height * scale);
-  }
+  };
 
-  const getScaledCoordinates = (x: number, y: number, width: number, height: number, collageWidth: number, collageHeight: number, screenWidth: number, screenHeight: number): any => {
-    const screenX = (x / collageWidth) * screenWidth;
-    const screenY = (y / collageHeight) * screenHeight;
+  const getScaledCoordinates = (x: number, y: number, width: number, height: number, collageWidth: number, collageHeight: number, totalCollageWidth: number, totalCollageHeight: number): any => {
+    const screenX = (x / collageWidth) * totalCollageWidth;
+    const screenY = (y / collageHeight) * totalCollageHeight;
     return {
       x: screenX,
       y: screenY,
-      width: (width / collageWidth) * screenWidth,
-      height: (height / collageHeight) * screenHeight,
+      width: (width / collageWidth) * totalCollageWidth,
+      height: (height / collageHeight) * totalCollageHeight,
     };
-  }
+  };
 
   const handleClick = (e: any) => {
 
@@ -123,7 +112,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
         return;
       }
     }
-  }
+  };
 
   const renderPhotosInCollage = () => {
 
@@ -141,7 +130,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       if (!isNil(photosInCollage[index].filePath)) {
         const filePath = photosInCollage[index].filePath!;
 
-        const screenCoordinates = getScaledCoordinates(x, y, width, height, collageWidth, collageHeight, photoCollageConfig.width, photoCollageConfig.height);
+        const screenCoordinates = getScaledCoordinates(x, y, width, height, collageWidth, collageHeight, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight);
 
         photoImages.push({
           x: screenCoordinates.x,
@@ -161,7 +150,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
       index++;
     }
-  }
+  };
 
   const renderPhotoCollage = () => {
     if (isNil(props.photoCollageSpec) ||
@@ -171,7 +160,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       return;
     }
     renderPhotosInCollage();
-  }
+  };
 
   if (!isNil(canvasRef) && !isNil(ctx)) {
     const context = ctx;
@@ -184,15 +173,14 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     <div>
       <canvas
         id='collageCanvas'
-        width={photoCollageConfig.width.toString()}
-        height={photoCollageConfig.height.toString()}
+        width={photoCollageConfig.collageWidth.toString()}
+        height={photoCollageConfig.collageHeight.toString()}
         ref={setCanvasRef}
         onClick={handleClick}
       />
-    pizza
     </div>
   );
-}
+};
 
 function mapStateToProps(state: PhotoCollageState, ownProps: PhotoCollageCanvasPropsFromParent): Partial<PhotoCollageCanvasProps> {
   return {

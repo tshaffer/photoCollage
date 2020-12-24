@@ -39,8 +39,10 @@ export interface PhotoCollageConfig {
   volumeSpec: string;
   photosRootDirectory: string;
   photosManifestFileName: string;
-  width: number;
-  height: number;
+  collageWidth: number;
+  collageHeight: number;
+  screenWidth: number;
+  screenHeight: number;
 }
 
 export interface PhotoCollageState {

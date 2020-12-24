@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 
 export let photoCollageConfig: PhotoCollageConfig;
 
-export const readConfig = (pathToConfigFile: string) => {
+export const readConfig = (pathToConfigFile: string): void => {
 
   try {
     // const rawConfig = dotenv.config({ path: pathToConfigFile }).parsed;
@@ -16,8 +16,10 @@ export const readConfig = (pathToConfigFile: string) => {
         volumeSpec: parsedConfig.volumeSpec,
         photosRootDirectory: parsedConfig.photosRootDirectory,
         photosManifestFileName: parsedConfig.photosManifestFileName,
-        width: parseInt(parsedConfig.width, 10),
-        height: parseInt(parsedConfig.height, 10),
+        screenWidth: parseInt(parsedConfig.screenWidth, 10),
+        screenHeight: parseInt(parsedConfig.screnHeight, 10),
+        collageWidth: parseInt(parsedConfig.collageWidth, 10),
+        collageHeight: parseInt(parsedConfig.collageHeight, 10),
       };
       console.log('readConfig, config: ', photoCollageConfig);
     }

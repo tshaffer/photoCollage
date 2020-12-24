@@ -10,8 +10,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { blue } from '@material-ui/core/colors';
-
 import { isNil } from 'lodash';
 
 import {
@@ -44,9 +42,17 @@ export interface PhotoCollageProps {
 // -----------------------------------------------------------------------
 
 const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
+  parentDiv: {
+    position: 'relative',
+    height: '1080px',
+  },
+  photoCollageDiv: {
+    // height: '50%',
+    height: '1000px',
+  },
+  toolbarDiv: {
+    position: 'absolute',
+    bottom: 0,
   },
 });
 
@@ -57,7 +63,7 @@ interface PhotoDialogProps {
 }
 
 const PhotoDialog = (props: PhotoDialogProps) => {
-  // const classes = useStyles();
+
   const { onClose, selectedPhoto, open } = props;
 
   const handleCloseStayPaused = () => {
@@ -105,6 +111,8 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 
   const [_selectedPhoto, setSelectedPhoto] = React.useState<DisplayedPhoto | undefined>(undefined);
 
+  const classes = useStyles();
+
   const handleClose = (resumePlayback: boolean) => {
     console.log('resumePlayback: ', resumePlayback);
     setOpen(false);
@@ -136,13 +144,17 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   };
 
   return (
-    <div>
-      <PhotoCollageCanvas
-        onSelectPhoto={handleSelectPhoto}
-      />
-      {renderDialog()}
-      pizza
-    </div >
+    <div className={classes.parentDiv}>
+      <div className={classes.photoCollageDiv}>
+        <PhotoCollageCanvas
+          onSelectPhoto={handleSelectPhoto}
+        />
+        {renderDialog()}
+      </div >
+      <div className={classes.toolbarDiv}>
+        this is a long flibbet
+      </div>
+    </div>
   );
 
 };

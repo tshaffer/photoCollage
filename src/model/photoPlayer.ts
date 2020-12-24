@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { cloneDeep } from 'lodash';
 import { Action } from 'redux';
 import { PhotoInCollageSpec, PhotoPlayer } from '../type';
@@ -78,7 +79,6 @@ const initialState: PhotoPlayer = {
 
 export const photoPlayerReducer = (
   state: PhotoPlayer = initialState,
-  // action: Action & PhotoCollageModelBaseAction<SetTimeBetweenUpdatesPayload> & PhotoCollageModelBaseAction<SetPhotoCollageSpecPayload>,
   action: Action & SetTimeBetweenUpdatesAction & SetPhotoCollageSpecAction & SetActivePopulatedCollageAction,
 ): PhotoPlayer => {
   switch (action.type) {
