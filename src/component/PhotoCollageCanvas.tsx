@@ -60,6 +60,8 @@ let canvasRef: any = null;
 let ctx: any = null;
 let photoImages: DisplayedPhoto[] = [];
 
+let doubleClickTimer: ReturnType<typeof setTimeout>;
+
 const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   React.useEffect(props.onStartPlayback, []);
@@ -191,6 +193,19 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     renderPhotosInCollage();
   };
 
+  const clickHandler = (event: any) => {
+    console.log('clickHandler invoked');
+    clearTimeout(doubleClickTimer);
+    if (event.detail === 1) {
+      doubleClickTimer = setTimeout(() => {
+        console.log('SINGLE CLICK');
+      }, 200);
+  
+    } else if (event.detail === 2) {
+      console.log('DOUBLE CLICK');
+    }
+  };
+
   if (!isNil(canvasRef) && !isNil(ctx)) {
     const context = ctx;
     context.imageSmoothingEnabled = false;
@@ -202,14 +217,19 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     }
   }
 
+  /*
+    removed from canvas element for now.
+        onClick={handleClick}
+  */
   return (
-    <div>
+    <div
+      onClick={clickHandler}
+    >
       <canvas
         id='collageCanvas'
         width={photoCollageConfig.collageWidth.toString()}
         height={photoCollageConfig.collageHeight.toString()}
         ref={setCanvasRef}
-        onClick={handleClick}
       />
     </div>
   );
