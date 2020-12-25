@@ -99,24 +99,24 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     };
   };
 
-  const handleClick = (e: any) => {
+  // const handleClick = (e: any) => {
 
-    const elem = canvasRef;
-    const elemLeft = elem.offsetLeft + elem.clientLeft;
-    const elemTop = elem.offsetTop + elem.clientTop;
+  //   const elem = canvasRef;
+  //   const elemLeft = elem.offsetLeft + elem.clientLeft;
+  //   const elemTop = elem.offsetTop + elem.clientTop;
 
-    const x = e.pageX - elemLeft;
-    const y = e.pageY - elemTop;
+  //   const x = e.pageX - elemLeft;
+  //   const y = e.pageY - elemTop;
 
-    for (const photoImage of photoImages) {
-      if (y > photoImage.y && y < photoImage.y + photoImage.height
-        && x > photoImage.x && x < photoImage.x + photoImage.width) {
-        props.onStopPlayback();
-        props.onSelectPhoto(photoImage);
-        return;
-      }
-    }
-  };
+  //   for (const photoImage of photoImages) {
+  //     if (y > photoImage.y && y < photoImage.y + photoImage.height
+  //       && x > photoImage.x && x < photoImage.x + photoImage.width) {
+  //       props.onStopPlayback();
+  //       props.onSelectPhoto(photoImage);
+  //       return;
+  //     }
+  //   }
+  // };
 
   const renderPhotosInCollage = () => {
 
@@ -193,16 +193,52 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     renderPhotosInCollage();
   };
 
-  const clickHandler = (event: any) => {
-    console.log('clickHandler invoked');
+  const getPhotoAtLocation = (pageX: any, pageY: any): DisplayedPhoto | null => {
+
+    const elem = canvasRef;
+    const elemLeft = elem.offsetLeft + elem.clientLeft;
+    const elemTop = elem.offsetTop + elem.clientTop;
+
+    const x = pageX - elemLeft;
+    const y = pageY - elemTop;
+
+    let selectedPhotoImage: DisplayedPhoto | null = null;
+
+    for (const photoImage of photoImages) {
+      if (y > photoImage.y && y < photoImage.y + photoImage.height
+        && x > photoImage.x && x < photoImage.x + photoImage.width) {
+        selectedPhotoImage = photoImage;
+        break;
+      }
+    }
+
+    return selectedPhotoImage;
+  };
+
+  const handleSingleClick = (event: any) => {
+    const selectedPhoto: DisplayedPhoto | null = getPhotoAtLocation(event.pageX, event.pageY);
+    console.log('handleSingleClick, selectedPhoto is:');
+    console.log(selectedPhoto);
+  };
+
+  const handleDoubleClick = (event: any) => {
+    const selectedPhoto: DisplayedPhoto | null = getPhotoAtLocation(event.pageX, event.pageY);
+    console.log('handleDoubleClick, selectedPhoto is:');
+    console.log(selectedPhoto);
+  };
+
+  const handleClick = (event: any) => {
+
     clearTimeout(doubleClickTimer);
     if (event.detail === 1) {
       doubleClickTimer = setTimeout(() => {
         console.log('SINGLE CLICK');
+        handleSingleClick(event);
       }, 200);
-  
+
     } else if (event.detail === 2) {
       console.log('DOUBLE CLICK');
+      handleDoubleClick(event);
     }
   };
 
@@ -217,13 +253,9 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     }
   }
 
-  /*
-    removed from canvas element for now.
-        onClick={handleClick}
-  */
   return (
     <div
-      onClick={clickHandler}
+      onClick={handleClick}
     >
       <canvas
         id='collageCanvas'
