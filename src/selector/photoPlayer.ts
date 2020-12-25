@@ -26,3 +26,7 @@ export const getPhotosInCollage = (state: PhotoCollageState): PhotoInCollageSpec
 export const getSelectedDisplayedPhoto = (state: PhotoCollageState): DisplayedPhoto | null => {
   return state.photoPlayer.selectedDisplayedPhoto;
 };
+
+export const getPriorPhotosInCollage = (state: PhotoCollageState): PhotoInCollageSpec[] => {
+  return state.photoPlayer.priorPhotosInCollage;
+};

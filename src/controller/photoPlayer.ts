@@ -18,6 +18,8 @@ import {
   stopPhotoPlayback,
   enterFullScreenDisplay,
   exitFullScreenDisplay,
+  photoCollageSpecsReducer,
+  setPriorPopulatedPhotoCollage,
 } from '../model';
 import {
   getTimeBetweenUpdates,
@@ -82,7 +84,21 @@ const getCollagePhotos = (state: PhotoCollageState): PhotoInCollageSpec[] => {
 
 const getNextCollagePhotos = () => {
   return ((dispatch: any, getState: any) => {
+
+    // before getting next set of photos, save current set of photos
+    const photoCollageSpec: PhotoCollageSpec | null = getActivePhotoCollageSpec(getState());
+    if (!isNil(photoCollageSpec)) {
+      const photosInCollageSpecs: PhotoInCollageSpec[] = photoCollageSpec.photosInCollageSpecs;
+      dispatch(setPriorPopulatedPhotoCollage(photosInCollageSpecs));
+    }
+
     const photosInCollage: PhotoInCollageSpec[] = getCollagePhotos(getState());
+    dispatch(setPopulatedPhotoCollage(photosInCollage));
+  });
+};
+
+export const setPopulatedPhotoCollage = (photosInCollage: PhotoInCollageSpec[]) => {
+  return ((dispatch: any, getState: any) => {
     dispatch(setActivePopulatedPhotoCollage(photosInCollage));
     const filePaths: string[] = photosInCollage.map((photoInCollage) => {
       return photoInCollage.filePath!;
@@ -114,6 +130,7 @@ export const stopPlayback = () => {
 };
 
 // TODO - naming consistency
+// TODO - this function is unnecessary I think - just call model directly
 export const enterFullScreenPlayback = () => {
   return ((dispatch: any, getState: any): any => {
     dispatch(enterFullScreenDisplay());

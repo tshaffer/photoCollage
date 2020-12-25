@@ -24,7 +24,8 @@ import {
   getActivePhotoCollageSpec,
   getPhotoCollection,
   getPhotosInCollage,
-  getSelectedDisplayedPhoto
+  getSelectedDisplayedPhoto,
+  getPriorPhotosInCollage,
 } from '../selector';
 import {
   setSelectedDisplayedPhoto
@@ -54,6 +55,7 @@ export interface PhotoCollageCanvasProps extends PhotoCollageCanvasPropsFromPare
   photoCollection: PhotoCollection;
   photoCollageSpec: PhotoCollageSpec | null;
   photosInCollage: PhotoInCollageSpec[];
+  priorPhotosInCollage: PhotoInCollageSpec[];
   onStartPlayback: () => any;
   onStopPlayback: () => any;
   onSetSelectedDisplayedPhoto: (selectedDisplayPhoto: DisplayedPhoto | null) => any;
@@ -72,6 +74,7 @@ let doubleClickTimer: ReturnType<typeof setTimeout>;
 
 const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
+  // Equivalent to old componentDidMount
   React.useEffect(props.onStartPlayback, []);
 
   const getPhotoAtLocation = (pageX: any, pageY: any): DisplayedPhoto | null => {
@@ -291,6 +294,7 @@ function mapStateToProps(state: PhotoCollageState, ownProps: PhotoCollageCanvasP
     photoCollection: getPhotoCollection(state),
     photoCollageSpec: getActivePhotoCollageSpec(state),
     photosInCollage: getPhotosInCollage(state),
+    priorPhotosInCollage: getPriorPhotosInCollage(state),
     selectedDisplayPhoto: getSelectedDisplayedPhoto(state),
     onSelectPhoto: ownProps.onSelectPhoto,
   };

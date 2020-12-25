@@ -25,6 +25,7 @@ import { isNil } from 'lodash';
 import {
   PhotoCollageState,
   DisplayedPhoto,
+  PhotoInCollageSpec,
 } from '../type';
 import PhotoCollageCanvas from './PhotoCollageCanvas';
 
@@ -33,10 +34,12 @@ import {
   stopPlayback,
   enterFullScreenPlayback,
   exitFullScreenPlayback,
+  setPopulatedPhotoCollage,
 } from '../controller';
 import {
   getPlaybackActive,
   getFullScreenDisplay,
+  getPriorPhotosInCollage,
 } from '../selector';
 
 // -----------------------------------------------------------------------
@@ -48,10 +51,12 @@ import {
 export interface PhotoCollageProps {
   playbackActive: boolean;
   fullScreenDisplay: boolean;
+  priorPhotosInCollage: PhotoInCollageSpec[];
   onStartPlayback: () => any;
   onStopPlayback: () => any;
   onEnterFullScreenPlayback: () => any;
   onExitFullScreenPlayback: () => any;
+  onSetPopulatedPhotoCollage: (photosInCollage: PhotoInCollageSpec[]) => any;
 }
 
 // -----------------------------------------------------------------------
@@ -169,6 +174,26 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 
   const handleReplay = () => {
     console.log('handleReplay invoked');
+
+    // get state of playback, restore at end of handler
+
+    props.onStopPlayback();
+
+    // get prior photos
+    const priorPhotosInCollage: PhotoInCollageSpec[] = props.priorPhotosInCollage;
+    if (priorPhotosInCollage.length === 0) {
+      console.log('no prior photos');
+      return;
+    }
+    else {
+      // set current photos to prior photos
+      props.onSetPopulatedPhotoCollage(priorPhotosInCollage);
+
+      // cause them to get displayed
+      // restart full playback as appropriate
+      // TODO - probably starts playback
+      props.onStartPlayback();
+    }
   };
 
   const handleDisplayFullScreen = () => {
@@ -279,6 +304,7 @@ function mapStateToProps(state: PhotoCollageState, ownProps: any): Partial<Photo
   return {
     playbackActive: getPlaybackActive(state),
     fullScreenDisplay: getFullScreenDisplay(state),
+    priorPhotosInCollage: getPriorPhotosInCollage(state),
   };
 }
 
@@ -288,6 +314,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onStopPlayback: stopPlayback,
     onEnterFullScreenPlayback: enterFullScreenPlayback,
     onExitFullScreenPlayback: exitFullScreenPlayback,
+    onSetPopulatedPhotoCollage: setPopulatedPhotoCollage,
   }, dispatch);
 };
 

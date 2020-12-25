@@ -13,6 +13,7 @@ const EXIT_FULL_SCREEN_DISPLAY = 'EXIT_FULL_SCREEN_PLAYBACK';
 const SET_TIME_BETWEEN_UPDATES = 'SET_TIME_BETWEEN_UPDATES';
 const SET_PHOTO_COLLAGE_SPEC = 'SET_PHOTO_COLLAGE_SPEC';
 const SET_ACTIVE_POPULATED_PHOTO_COLLAGE = 'SET_ACTIVE_POPULATED_PHOTO_COLLAGE';
+const SET_PRIOR_POPULATED_PHOTO_COLLAGE = 'SET_PRIOR_POPULATED_PHOTO_COLLAGE';
 const SET_SELECTED_DISLAYED_PHOTO = 'SET_SELECTED_DISLAYED_PHOTO';
 
 // ------------------------------------
@@ -83,6 +84,18 @@ export const setActivePopulatedPhotoCollage = (
   };
 };
 
+export type SetPriorPopulatedPhotoCollagePayload = PhotoInCollageSpec[];
+type SetPriorPopulatedCollageAction = PhotoCollageModelAction<SetPriorPopulatedPhotoCollagePayload>;
+
+export const setPriorPopulatedPhotoCollage = (
+  photosInCollage: PhotoInCollageSpec[],
+): SetPriorPopulatedCollageAction => {
+  return {
+    type: SET_PRIOR_POPULATED_PHOTO_COLLAGE,
+    payload: photosInCollage,
+  };
+};
+
 export type SetSelectedDisplayedPhotoPayload = DisplayedPhoto | null;
 type SetSelectedDisplayedPhotoAction = PhotoCollageModelAction<SetSelectedDisplayedPhotoPayload>;
 
@@ -104,12 +117,13 @@ const initialState: PhotoPlayer = {
   timeBetweenUpdates: 5,
   photoCollageSpec: '',
   photosInCollage: [],
+  priorPhotosInCollage: [],
   selectedDisplayedPhoto: null,
 };
 
 export const photoPlayerReducer = (
   state: PhotoPlayer = initialState,
-  action: Action & SetTimeBetweenUpdatesAction & SetPhotoCollageSpecAction & SetActivePopulatedCollageAction,
+  action: Action & SetTimeBetweenUpdatesAction & SetPhotoCollageSpecAction & SetActivePopulatedCollageAction & SetPriorPopulatedCollageAction,
 ): PhotoPlayer => {
   switch (action.type) {
     case START_PHOTO_PLAYBACK: {
@@ -152,6 +166,12 @@ export const photoPlayerReducer = (
       return {
         ...state,
         photosInCollage: cloneDeep(action.payload),
+      };
+    }
+    case SET_PRIOR_POPULATED_PHOTO_COLLAGE: {
+      return {
+        ...state,
+        priorPhotosInCollage: cloneDeep(action.payload),
       };
     }
     case SET_SELECTED_DISLAYED_PHOTO: {
