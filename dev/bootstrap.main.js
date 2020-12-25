@@ -117,8 +117,8 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
-    height: 600,
-    width: 800,
+    height: 1920,
+    width: 1080,
     webPreferences: {
       // This following windows parameters should be considered before 
       // deploying this electron to production

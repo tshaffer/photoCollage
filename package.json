@@ -4,9 +4,9 @@
   "author": "Ted",
   "license": "UNLICENSED",
   "typings": "./index.d.ts",
-  "main": "./dist/electron/main.bsuit.js",
+  "main": "./dist/electron/main.photocollage.js",
   "browser": {
-    "./dist/electron/main.bsuit.js": "./dist/browser/main.bsuit.js"
+    "./dist/electron/main.photocollage.js": "./dist/browser/main.photocollage.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",

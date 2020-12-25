@@ -12,8 +12,8 @@ let mainWindow: Electron.BrowserWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 1920,
+    width: 1080,
     webPreferences: {
       // This following windows parameters should be considered before 
       // deploying this electron to production

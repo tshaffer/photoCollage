@@ -95,36 +95,36 @@ module.exports = function (webpackEnv) {
   // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
   // Get environment variables to inject into our app.
   const envVar = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
-  
+
   let appProdIndexJs = paths.appIndexJs;
   if (isStandalone || isEnvDevelopment) {
     appProdIndexJs = paths.appStandaloneIndexJs;
   }
-  
-  let distDeploymentDir = paths.appDistElectron;;
+
+  let distDeploymentDir = paths.appDistElectron;
   if (isBrowser) {
     distDeploymentDir = paths.appDistBrowser;
   } else if (isStandalone) {
     distDeploymentDir = paths.appDistStandalone;
   }
 
-  function DtsBundlePlugin(){}
+  function DtsBundlePlugin() { }
   DtsBundlePlugin.prototype.apply = function (compiler) {
     compiler.hooks.done.tap('done', function (result) {
       var dts = require('dts-bundle');
-      
+
       // don't attempt to generate index.d.ts if upstream webpack emits errors
       if (result && result.compilation && size(result.compilation.errors) === 0)
-      dts.bundle({
-        name: '[name]',
-        main:  paths.appDistTypings + '/index.d.ts',
-        out: '../../index.d.ts',
-        removeSource: true,
-        outputAsModuleFolder: true // to use npm in-package typings
-      });
+        dts.bundle({
+          name: '[name]',
+          main: paths.appDistTypings + '/index.d.ts',
+          out: '../../index.d.ts',
+          removeSource: true,
+          outputAsModuleFolder: true // to use npm in-package typings
+        });
     });
   };
-  
+
   let nodeStubs = {};
   if (!isElectron && !isStandalone) {
     nodeStubs = {
@@ -166,13 +166,13 @@ module.exports = function (webpackEnv) {
       '@brightsign/videooutput': 'commonjs @brightsign/videooutput',
     });
   } else if (isEnvProduction) {
-    externals.push(function(context, request, callback) {
+    externals.push(function (context, request, callback) {
       if (/^lodash.*/.test(request)) {
         return callback(null, 'commonjs ' + request);
       }
       callback();
     });
-    externals.push(function(context, request, callback) {
+    externals.push(function (context, request, callback) {
       if (/^@brightsign.*/.test(request)) {
         return callback(null, 'commonjs ' + request);
       }
@@ -273,27 +273,27 @@ module.exports = function (webpackEnv) {
     entry:
       isEnvDevelopment && !shouldUseReactRefresh
         ? [
-            // Include an alternative client for WebpackDevServer. A client's job is to
-            // connect to WebpackDevServer by a socket and get notified about changes.
-            // When you save a file, the client will either apply hot updates (in case
-            // of CSS changes), or refresh the page (in case of JS changes). When you
-            // make a syntax error, this client will display a syntax error overlay.
-            // Note: instead of the default WebpackDevServer client, we use a custom one
-            // to bring better experience for Create React App users. You can replace
-            // the line below with these two lines if you prefer the stock client:
-            //
-            // require.resolve('webpack-dev-server/client') + '?/',
-            // require.resolve('webpack/hot/dev-server'),
-            //
-            // When using the experimental react-refresh integration,
-            // the webpack plugin takes care of injecting the dev client for us.
-            webpackDevClientEntry,
-            // Finally, this is your app's code:
-            appProdIndexJs,
-            // We include the app code last so that if there is a runtime error during
-            // initialization, it doesn't blow up the WebpackDevServer client, and
-            // changing JS code would still trigger a refresh.
-          ]
+          // Include an alternative client for WebpackDevServer. A client's job is to
+          // connect to WebpackDevServer by a socket and get notified about changes.
+          // When you save a file, the client will either apply hot updates (in case
+          // of CSS changes), or refresh the page (in case of JS changes). When you
+          // make a syntax error, this client will display a syntax error overlay.
+          // Note: instead of the default WebpackDevServer client, we use a custom one
+          // to bring better experience for Create React App users. You can replace
+          // the line below with these two lines if you prefer the stock client:
+          //
+          // require.resolve('webpack-dev-server/client') + '?/',
+          // require.resolve('webpack/hot/dev-server'),
+          //
+          // When using the experimental react-refresh integration,
+          // the webpack plugin takes care of injecting the dev client for us.
+          webpackDevClientEntry,
+          // Finally, this is your app's code:
+          appProdIndexJs,
+          // We include the app code last so that if there is a runtime error during
+          // initialization, it doesn't blow up the WebpackDevServer client, and
+          // changing JS code would still trigger a refresh.
+        ]
         : appProdIndexJs,
     output: {
       libraryTarget: 'umd',
@@ -304,7 +304,7 @@ module.exports = function (webpackEnv) {
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: isEnvProduction
-        ? '[name]' +  (isStandalone ? '.[contenthash:8]' : '.bsuit') + '.js'
+        ? '[name]' + (isStandalone ? '.[contenthash:8]' : '.photocollage') + '.js'
         : isEnvDevelopment && 'static/js/bundle.js',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,
@@ -319,11 +319,11 @@ module.exports = function (webpackEnv) {
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
-            path
-              .relative(paths.appSrc, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
+          path
+            .relative(paths.appSrc, info.absoluteResourcePath)
+            .replace(/\\/g, '/')
         : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
       jsonpFunction: `webpackJsonp${appPackageJson.name}`,
@@ -381,13 +381,13 @@ module.exports = function (webpackEnv) {
             parser: safePostCssParser,
             map: shouldUseSourceMap
               ? {
-                  // `inline: false` forces the sourcemap to be output into a
-                  // separate file
-                  inline: false,
-                  // `annotation: true` appends the sourceMappingURL to the end of
-                  // the css file, helping the browser find the sourcemap
-                  annotation: true,
-                }
+                // `inline: false` forces the sourcemap to be output into a
+                // separate file
+                inline: false,
+                // `annotation: true` appends the sourceMappingURL to the end of
+                // the css file, helping the browser find the sourcemap
+                annotation: true,
+              }
               : false,
           },
           cssProcessorPluginOptions: {
@@ -519,7 +519,7 @@ module.exports = function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -625,28 +625,28 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       new webpack.NormalModuleReplacementPlugin(/^@brightsign.*$/, (resource) => {
-        resource.request = resource.request.replace(/^@brightsign\/assetpool$/,  path.resolve(paths.appBrightSignMock, 'assetpool'));
-        resource.request = resource.request.replace(/^@brightsign\/assetpoolfetcher$/,  path.resolve(paths.appBrightSignMock, 'assetpoolfetcher'));
-        resource.request = resource.request.replace(/^@brightsign\/assetrealizer$/,  path.resolve(paths.appBrightSignMock, 'assetrealizer'));
-        resource.request = resource.request.replace(/^@brightsign\/compositor$/,  path.resolve(paths.appBrightSignMock, 'compositor'));
-        resource.request = resource.request.replace(/^@brightsign\/decoderconfiguration$/,  path.resolve(paths.appBrightSignMock, 'decoderconfiguration'));
-        resource.request = resource.request.replace(/^@brightsign\/dwsconfiguration$/,  path.resolve(paths.appBrightSignMock, 'dwsconfiguration'));
-        resource.request = resource.request.replace(/^@brightsign\/filesysteminfo$/,  path.resolve(paths.appBrightSignMock, 'filesysteminfo'));
-        resource.request = resource.request.replace(/^@brightsign\/hostconfiguration$/,  path.resolve(paths.appBrightSignMock, 'hostconfiguration'));
-        resource.request = resource.request.replace(/^@brightsign\/keyboard$/,  path.resolve(paths.appBrightSignMock, 'keyboard'));
-        resource.request = resource.request.replace(/^@brightsign\/keystore$/,  path.resolve(paths.appBrightSignMock, 'keystore'));
-        resource.request = resource.request.replace(/^@brightsign\/networkconfiguration$/,  path.resolve(paths.appBrightSignMock, 'networkconfiguration'));
-        resource.request = resource.request.replace(/^@brightsign\/networkdiagnostics$/,  path.resolve(paths.appBrightSignMock, 'networkdiagnostics'));
-        resource.request = resource.request.replace(/^@brightsign\/pointer$/,  path.resolve(paths.appBrightSignMock, 'pointer'));
-        resource.request = resource.request.replace(/^@brightsign\/pointercalibration$/,  path.resolve(paths.appBrightSignMock, 'pointercalibration'));
-        resource.request = resource.request.replace(/^@brightsign\/registry$/,  path.resolve(paths.appBrightSignMock, 'registry'));
-        resource.request = resource.request.replace(/^@brightsign\/screenshot$/,  path.resolve(paths.appBrightSignMock, 'screenshot'));
-        resource.request = resource.request.replace(/^@brightsign\/storageinfo$/,  path.resolve(paths.appBrightSignMock, 'storageinfo'));
-        resource.request = resource.request.replace(/^@brightsign\/system$/,  path.resolve(paths.appBrightSignMock, 'system'));
-        resource.request = resource.request.replace(/^@brightsign\/systemtime$/,  path.resolve(paths.appBrightSignMock, 'systemtime'));
-        resource.request = resource.request.replace(/^@brightsign\/videoinput$/,  path.resolve(paths.appBrightSignMock, 'videoinput'));
-        resource.request = resource.request.replace(/^@brightsign\/videomodeconfiguration$/,  path.resolve(paths.appBrightSignMock, 'videomodeconfiguration'));
-        resource.request = resource.request.replace(/^@brightsign\/videooutput$/,  path.resolve(paths.appBrightSignMock, 'videooutput'));
+        resource.request = resource.request.replace(/^@brightsign\/assetpool$/, path.resolve(paths.appBrightSignMock, 'assetpool'));
+        resource.request = resource.request.replace(/^@brightsign\/assetpoolfetcher$/, path.resolve(paths.appBrightSignMock, 'assetpoolfetcher'));
+        resource.request = resource.request.replace(/^@brightsign\/assetrealizer$/, path.resolve(paths.appBrightSignMock, 'assetrealizer'));
+        resource.request = resource.request.replace(/^@brightsign\/compositor$/, path.resolve(paths.appBrightSignMock, 'compositor'));
+        resource.request = resource.request.replace(/^@brightsign\/decoderconfiguration$/, path.resolve(paths.appBrightSignMock, 'decoderconfiguration'));
+        resource.request = resource.request.replace(/^@brightsign\/dwsconfiguration$/, path.resolve(paths.appBrightSignMock, 'dwsconfiguration'));
+        resource.request = resource.request.replace(/^@brightsign\/filesysteminfo$/, path.resolve(paths.appBrightSignMock, 'filesysteminfo'));
+        resource.request = resource.request.replace(/^@brightsign\/hostconfiguration$/, path.resolve(paths.appBrightSignMock, 'hostconfiguration'));
+        resource.request = resource.request.replace(/^@brightsign\/keyboard$/, path.resolve(paths.appBrightSignMock, 'keyboard'));
+        resource.request = resource.request.replace(/^@brightsign\/keystore$/, path.resolve(paths.appBrightSignMock, 'keystore'));
+        resource.request = resource.request.replace(/^@brightsign\/networkconfiguration$/, path.resolve(paths.appBrightSignMock, 'networkconfiguration'));
+        resource.request = resource.request.replace(/^@brightsign\/networkdiagnostics$/, path.resolve(paths.appBrightSignMock, 'networkdiagnostics'));
+        resource.request = resource.request.replace(/^@brightsign\/pointer$/, path.resolve(paths.appBrightSignMock, 'pointer'));
+        resource.request = resource.request.replace(/^@brightsign\/pointercalibration$/, path.resolve(paths.appBrightSignMock, 'pointercalibration'));
+        resource.request = resource.request.replace(/^@brightsign\/registry$/, path.resolve(paths.appBrightSignMock, 'registry'));
+        resource.request = resource.request.replace(/^@brightsign\/screenshot$/, path.resolve(paths.appBrightSignMock, 'screenshot'));
+        resource.request = resource.request.replace(/^@brightsign\/storageinfo$/, path.resolve(paths.appBrightSignMock, 'storageinfo'));
+        resource.request = resource.request.replace(/^@brightsign\/system$/, path.resolve(paths.appBrightSignMock, 'system'));
+        resource.request = resource.request.replace(/^@brightsign\/systemtime$/, path.resolve(paths.appBrightSignMock, 'systemtime'));
+        resource.request = resource.request.replace(/^@brightsign\/videoinput$/, path.resolve(paths.appBrightSignMock, 'videoinput'));
+        resource.request = resource.request.replace(/^@brightsign\/videomodeconfiguration$/, path.resolve(paths.appBrightSignMock, 'videomodeconfiguration'));
+        resource.request = resource.request.replace(/^@brightsign\/videooutput$/, path.resolve(paths.appBrightSignMock, 'videooutput'));
       }),
       // Generates an `index.html` file with the <script> injected.
       (isEnvDevelopment || isStandalone) && new HtmlWebpackPlugin(
@@ -658,19 +658,19 @@ module.exports = function (webpackEnv) {
           },
           isEnvProduction
             ? {
-                minify: {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
-                },
-              }
+              minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true,
+              },
+            }
             : undefined
         )
       ),
@@ -678,9 +678,9 @@ module.exports = function (webpackEnv) {
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
       isEnvProduction &&
-        shouldInlineRuntimeChunk &&
-        isStandalone &&
-        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
+      shouldInlineRuntimeChunk &&
+      isStandalone &&
+      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
@@ -701,18 +701,18 @@ module.exports = function (webpackEnv) {
       // Experimental hot reloading for React .
       // https://github.com/facebook/react/tree/master/packages/react-refresh
       isEnvDevelopment &&
-        shouldUseReactRefresh &&
-        new ReactRefreshWebpackPlugin({
-          overlay: {
-            entry: webpackDevClientEntry,
-            // The expected exports are slightly different from what the overlay exports,
-            // so an interop is included here to enable feedback on module-level errors.
-            module: reactRefreshOverlayEntry,
-            // Since we ship a custom dev client and overlay integration,
-            // the bundled socket handling logic can be eliminated.
-            sockIntegration: false,
-          },
-        }),
+      shouldUseReactRefresh &&
+      new ReactRefreshWebpackPlugin({
+        overlay: {
+          entry: webpackDevClientEntry,
+          // The expected exports are slightly different from what the overlay exports,
+          // so an interop is included here to enable feedback on module-level errors.
+          module: reactRefreshOverlayEntry,
+          // Since we ship a custom dev client and overlay integration,
+          // the bundled socket handling logic can be eliminated.
+          sockIntegration: false,
+        },
+      }),
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
@@ -722,14 +722,14 @@ module.exports = function (webpackEnv) {
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebook/create-react-app/issues/186
       isEnvDevelopment &&
-        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          // Options similar to the same options in webpackOptions.output
-          // both options are optional
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-        }),
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
       //   output file so that tools can pick it up without having to parse
@@ -741,13 +741,13 @@ module.exports = function (webpackEnv) {
         publicPath: paths.publicUrlOrPath,
         generate: (seed, files, entrypoints) => {
           const manifestFiles = files
-          .filter(
-            file => !file.path.endsWith('.d.ts')
-          )
-          .reduce((manifest, file) => {
-            manifest[file.name] = file.path;
-            return manifest;
-          }, seed);
+            .filter(
+              file => !file.path.endsWith('.d.ts')
+            )
+            .reduce((manifest, file) => {
+              manifest[file.name] = file.path;
+              return manifest;
+            }, seed);
 
           const entrypointFiles = entrypoints.main.filter(
             fileName => !fileName.endsWith('.map') && !fileName.endsWith('.d.ts')
@@ -768,43 +768,43 @@ module.exports = function (webpackEnv) {
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
       isEnvProduction &&
-        fs.existsSync(swSrc) &&
-        new WorkboxWebpackPlugin.InjectManifest({
-          swSrc,
-          dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
-          exclude: [/\.d.ts$/, /\.map$/, /asset-manifest\.json$/, /LICENSE/],
-        }),
+      fs.existsSync(swSrc) &&
+      new WorkboxWebpackPlugin.InjectManifest({
+        swSrc,
+        dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
+        exclude: [/\.d.ts$/, /\.map$/, /asset-manifest\.json$/, /LICENSE/],
+      }),
       // TypeScript type checking
       useTypeScript &&
-        new ForkTsCheckerWebpackPlugin({
-          typescript: resolve.sync('typescript', {
-            basedir: paths.appNodeModules,
-          }),
-          async: isEnvDevelopment,
-          checkSyntacticErrors: true,
-          resolveModuleNameModule: process.versions.pnp
-            ? `${__dirname}/pnpTs.js`
-            : undefined,
-          resolveTypeReferenceDirectiveModule: process.versions.pnp
-            ? `${__dirname}/pnpTs.js`
-            : undefined,
-          tsconfig: paths.appTsConfig,
-          reportFiles: [
-            // This one is specifically to match during CI tests,
-            // as micromatch doesn't match
-            // '../cra-template-typescript/template/src/App.tsx'
-            // otherwise.
-            '../**/src/**/*.{ts,tsx}',
-            '**/src/**/*.{ts,tsx}',
-            '!**/src/**/__tests__/**',
-            '!**/src/**/?(*.)(spec|test).*',
-            '!**/src/setupProxy.*',
-            '!**/src/setupTests.*',
-          ],
-          silent: true,
-          // The formatter is invoked directly in WebpackDevServerUtils during development
-          formatter: isEnvProduction ? typescriptFormatter : undefined,
+      new ForkTsCheckerWebpackPlugin({
+        typescript: resolve.sync('typescript', {
+          basedir: paths.appNodeModules,
         }),
+        async: isEnvDevelopment,
+        checkSyntacticErrors: true,
+        resolveModuleNameModule: process.versions.pnp
+          ? `${__dirname}/pnpTs.js`
+          : undefined,
+        resolveTypeReferenceDirectiveModule: process.versions.pnp
+          ? `${__dirname}/pnpTs.js`
+          : undefined,
+        tsconfig: paths.appTsConfig,
+        reportFiles: [
+          // This one is specifically to match during CI tests,
+          // as micromatch doesn't match
+          // '../cra-template-typescript/template/src/App.tsx'
+          // otherwise.
+          '../**/src/**/*.{ts,tsx}',
+          '**/src/**/*.{ts,tsx}',
+          '!**/src/**/__tests__/**',
+          '!**/src/**/?(*.)(spec|test).*',
+          '!**/src/setupProxy.*',
+          '!**/src/setupTests.*',
+        ],
+        silent: true,
+        // The formatter is invoked directly in WebpackDevServerUtils during development
+        formatter: isEnvProduction ? typescriptFormatter : undefined,
+      }),
       new ESLintPlugin({
         // Plugin options
         extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
