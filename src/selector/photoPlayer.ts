@@ -1,4 +1,5 @@
 import {
+  DisplayedPhoto,
   PhotoCollageState, PhotoInCollageSpec,
 } from '../type';
 
@@ -20,4 +21,8 @@ export const getPhotoCollageFilesSpec = (state: PhotoCollageState): string => {
 
 export const getPhotosInCollage = (state: PhotoCollageState): PhotoInCollageSpec[] => {
   return state.photoPlayer.photosInCollage;
+};
+
+export const getSelectedDisplayedPhoto = (state: PhotoCollageState): DisplayedPhoto | null => {
+  return state.photoPlayer.selectedDisplayedPhoto;
 };

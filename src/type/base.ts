@@ -98,6 +98,7 @@ export interface PhotoPlayer {
   timeBetweenUpdates: number;
   photoCollageSpec: string;
   photosInCollage: PhotoInCollageSpec[];
+  selectedDisplayedPhoto: DisplayedPhoto | null;
 }
 
 export interface DisplayedPhoto {

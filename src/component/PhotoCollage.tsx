@@ -174,7 +174,6 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   const handleDisplayFullScreen = () => {
     console.log('handleDisplayFullScreen invoked');
     props.onEnterFullScreenPlayback();
-
   };
 
   const handleExitFullScreenDisplay = () => {

@@ -14,6 +14,7 @@ import {
   PhotoInCollageSpec,
 } from '../type';
 import {
+  enterFullScreenPlayback,
   startPlayback,
   stopPlayback,
 } from '../controller';
@@ -22,8 +23,12 @@ import {
   getFullScreenDisplay,
   getActivePhotoCollageSpec,
   getPhotoCollection,
-  getPhotosInCollage
+  getPhotosInCollage,
+  getSelectedDisplayedPhoto
 } from '../selector';
+import {
+  setSelectedDisplayedPhoto
+} from '../model';
 
 // -----------------------------------------------------------------------
 // Types
@@ -45,11 +50,14 @@ export interface PhotoCollageCanvasComponentState {
 /** @private */
 export interface PhotoCollageCanvasProps extends PhotoCollageCanvasPropsFromParent {
   fullScreenDisplay: boolean;
+  selectedDisplayPhoto: DisplayedPhoto | null;
   photoCollection: PhotoCollection;
   photoCollageSpec: PhotoCollageSpec | null;
   photosInCollage: PhotoInCollageSpec[];
   onStartPlayback: () => any;
   onStopPlayback: () => any;
+  onSetSelectedDisplayedPhoto: (selectedDisplayPhoto: DisplayedPhoto | null) => any;
+  onEnterFullScreenPlayback: () => any;
 }
 
 // -----------------------------------------------------------------------
@@ -65,6 +73,60 @@ let doubleClickTimer: ReturnType<typeof setTimeout>;
 const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   React.useEffect(props.onStartPlayback, []);
+
+  const getPhotoAtLocation = (pageX: any, pageY: any): DisplayedPhoto | null => {
+
+    const elem = canvasRef;
+    const elemLeft = elem.offsetLeft + elem.clientLeft;
+    const elemTop = elem.offsetTop + elem.clientTop;
+
+    const x = pageX - elemLeft;
+    const y = pageY - elemTop;
+
+    let selectedPhotoImage: DisplayedPhoto | null = null;
+
+    for (const photoImage of photoImages) {
+      if (y > photoImage.y && y < photoImage.y + photoImage.height
+        && x > photoImage.x && x < photoImage.x + photoImage.width) {
+        selectedPhotoImage = photoImage;
+        break;
+      }
+    }
+
+    return selectedPhotoImage;
+  };
+
+  const handleSingleClick = (event: any) => {
+    const selectedPhoto: DisplayedPhoto | null = getPhotoAtLocation(event.pageX, event.pageY);
+    console.log('handleSingleClick, selectedPhoto is:');
+    console.log(selectedPhoto);
+  };
+
+  const handleDoubleClick = (event: any) => {
+    const selectedPhoto: DisplayedPhoto | null = getPhotoAtLocation(event.pageX, event.pageY);
+    console.log('handleDoubleClick, selectedPhoto is:');
+    console.log(selectedPhoto);
+
+    if (!isNil(selectedPhoto)) {
+      props.onStopPlayback();
+    }
+    props.onSetSelectedDisplayedPhoto(selectedPhoto);
+    props.onEnterFullScreenPlayback();
+  };
+
+  const handleClick = (event: any) => {
+    clearTimeout(doubleClickTimer);
+    if (event.detail === 1) {
+      doubleClickTimer = setTimeout(() => {
+        console.log('SINGLE CLICK');
+        handleSingleClick(event);
+      }, 200);
+
+    } else if (event.detail === 2) {
+      console.log('DOUBLE CLICK');
+      handleDoubleClick(event);
+    }
+  };
 
   const setCanvasRef = (element: any) => {
     if (!isNil(element)) {
@@ -158,12 +220,17 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   const renderFullScreenPhoto = () => {
 
-    const photosInCollage: PhotoInCollageSpec[] = props.photosInCollage;
-    if (photosInCollage.length === 0) {
+    const selectedPhoto: DisplayedPhoto | null = props.selectedDisplayPhoto;
+    if (isNil(selectedPhoto)) {
       return;
     }
 
-    const filePath = photosInCollage[0].filePath!;
+    const photoSpec: PhotoInCollageSpec = selectedPhoto.photoSpec;
+    if (isNil(photoSpec.filePath)) {
+      return;
+    }
+
+    const filePath = photoSpec.filePath;
 
     const screenCoordinates = getScaledCoordinates(0, 0, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight, photoCollageConfig.collageWidth, photoCollageConfig.collageHeight);
 
@@ -172,7 +239,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       y: 0,
       width: screenCoordinates.width,
       height: screenCoordinates.height,
-      photoSpec: photosInCollage[0],
+      photoSpec,
     });
 
     renderPhoto(
@@ -191,55 +258,6 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       return;
     }
     renderPhotosInCollage();
-  };
-
-  const getPhotoAtLocation = (pageX: any, pageY: any): DisplayedPhoto | null => {
-
-    const elem = canvasRef;
-    const elemLeft = elem.offsetLeft + elem.clientLeft;
-    const elemTop = elem.offsetTop + elem.clientTop;
-
-    const x = pageX - elemLeft;
-    const y = pageY - elemTop;
-
-    let selectedPhotoImage: DisplayedPhoto | null = null;
-
-    for (const photoImage of photoImages) {
-      if (y > photoImage.y && y < photoImage.y + photoImage.height
-        && x > photoImage.x && x < photoImage.x + photoImage.width) {
-        selectedPhotoImage = photoImage;
-        break;
-      }
-    }
-
-    return selectedPhotoImage;
-  };
-
-  const handleSingleClick = (event: any) => {
-    const selectedPhoto: DisplayedPhoto | null = getPhotoAtLocation(event.pageX, event.pageY);
-    console.log('handleSingleClick, selectedPhoto is:');
-    console.log(selectedPhoto);
-  };
-
-  const handleDoubleClick = (event: any) => {
-    const selectedPhoto: DisplayedPhoto | null = getPhotoAtLocation(event.pageX, event.pageY);
-    console.log('handleDoubleClick, selectedPhoto is:');
-    console.log(selectedPhoto);
-  };
-
-  const handleClick = (event: any) => {
-
-    clearTimeout(doubleClickTimer);
-    if (event.detail === 1) {
-      doubleClickTimer = setTimeout(() => {
-        console.log('SINGLE CLICK');
-        handleSingleClick(event);
-      }, 200);
-
-    } else if (event.detail === 2) {
-      console.log('DOUBLE CLICK');
-      handleDoubleClick(event);
-    }
   };
 
   if (!isNil(canvasRef) && !isNil(ctx)) {
@@ -273,6 +291,7 @@ function mapStateToProps(state: PhotoCollageState, ownProps: PhotoCollageCanvasP
     photoCollection: getPhotoCollection(state),
     photoCollageSpec: getActivePhotoCollageSpec(state),
     photosInCollage: getPhotosInCollage(state),
+    selectedDisplayPhoto: getSelectedDisplayedPhoto(state),
     onSelectPhoto: ownProps.onSelectPhoto,
   };
 }
@@ -281,6 +300,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onStartPlayback: startPlayback,
     onStopPlayback: stopPlayback,
+    onSetSelectedDisplayedPhoto: setSelectedDisplayedPhoto,
+    onEnterFullScreenPlayback: enterFullScreenPlayback,
   }, dispatch);
 };
 

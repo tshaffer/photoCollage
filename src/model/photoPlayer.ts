@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { Action } from 'redux';
-import { PhotoInCollageSpec, PhotoPlayer } from '../type';
+import { DisplayedPhoto, PhotoInCollageSpec, PhotoPlayer } from '../type';
 import { PhotoCollageModelAction } from './baseAction';
 
 // ------------------------------------
@@ -13,6 +13,7 @@ const EXIT_FULL_SCREEN_DISPLAY = 'EXIT_FULL_SCREEN_PLAYBACK';
 const SET_TIME_BETWEEN_UPDATES = 'SET_TIME_BETWEEN_UPDATES';
 const SET_PHOTO_COLLAGE_SPEC = 'SET_PHOTO_COLLAGE_SPEC';
 const SET_ACTIVE_POPULATED_PHOTO_COLLAGE = 'SET_ACTIVE_POPULATED_PHOTO_COLLAGE';
+const SET_SELECTED_DISLAYED_PHOTO = 'SET_SELECTED_DISLAYED_PHOTO';
 
 // ------------------------------------
 // Actions
@@ -82,6 +83,18 @@ export const setActivePopulatedPhotoCollage = (
   };
 };
 
+export type SetSelectedDisplayedPhotoPayload = DisplayedPhoto | null;
+type SetSelectedDisplayedPhotoAction = PhotoCollageModelAction<SetSelectedDisplayedPhotoPayload>;
+
+export const setSelectedDisplayedPhoto = (
+  selectedDisplayedPhoto: DisplayedPhoto | null,
+): SetSelectedDisplayedPhotoAction => {
+  return {
+    type: SET_SELECTED_DISLAYED_PHOTO,
+    payload: selectedDisplayedPhoto,
+  };
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -91,6 +104,7 @@ const initialState: PhotoPlayer = {
   timeBetweenUpdates: 5,
   photoCollageSpec: '',
   photosInCollage: [],
+  selectedDisplayedPhoto: null,
 };
 
 export const photoPlayerReducer = (
@@ -138,6 +152,12 @@ export const photoPlayerReducer = (
       return {
         ...state,
         photosInCollage: cloneDeep(action.payload),
+      };
+    }
+    case SET_SELECTED_DISLAYED_PHOTO: {
+      return {
+        ...state,
+        selectedDisplayedPhoto: action.payload,
       };
     }
     default:
