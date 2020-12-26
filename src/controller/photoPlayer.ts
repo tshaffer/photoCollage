@@ -120,6 +120,13 @@ export const startPlayback = () => {
   });
 };
 
+export const restartPlayback = () => {
+  return ((dispatch: any, getState: any): any => {
+    dispatch(startPhotoPlayback());
+    playbackTimer = setInterval(timeoutHandler, getTimeBetweenUpdates(getState()) * 1000, dispatch);
+  });
+};
+
 export const stopPlayback = () => {
   return ((dispatch: any, getState: any): any => {
     dispatch(stopPhotoPlayback());

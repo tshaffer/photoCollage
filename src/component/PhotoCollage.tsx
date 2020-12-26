@@ -30,6 +30,7 @@ import {
 import PhotoCollageCanvas from './PhotoCollageCanvas';
 
 import {
+  restartPlayback,
   startPlayback,
   stopPlayback,
   enterFullScreenPlayback,
@@ -52,6 +53,7 @@ export interface PhotoCollageProps {
   playbackActive: boolean;
   fullScreenDisplay: boolean;
   priorPhotosInCollage: PhotoInCollageSpec[];
+  onRestartPlayback: () => any;
   onStartPlayback: () => any;
   onStopPlayback: () => any;
   onEnterFullScreenPlayback: () => any;
@@ -147,7 +149,6 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   const classes = useStyles();
 
   const handleClose = (resumePlayback: boolean) => {
-    console.log('resumePlayback: ', resumePlayback);
     setOpen(false);
     if (resumePlayback) {
       props.onStartPlayback();
@@ -160,20 +161,17 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   };
 
   const handlePlay = () => {
-    console.log('handlePlay invoked');
     setOpen(false);
     props.onStartPlayback();
   };
 
   const handlePause = () => {
-    console.log('handlePause invoked');
     setSelectedPhoto(undefined);
     setOpen(false);
     props.onStopPlayback();
   };
 
   const handleReplay = () => {
-    console.log('handleReplay invoked');
 
     // get state of playback, restore at end of handler
 
@@ -192,17 +190,15 @@ const PhotoCollage = (props: PhotoCollageProps) => {
       // cause them to get displayed
       // restart full playback as appropriate
       // TODO - probably starts playback
-      props.onStartPlayback();
+      props.onRestartPlayback();
     }
   };
 
   const handleDisplayFullScreen = () => {
-    console.log('handleDisplayFullScreen invoked');
     props.onEnterFullScreenPlayback();
   };
 
   const handleExitFullScreenDisplay = () => {
-    console.log('handleExitFullScreenDisplay invoked');
     props.onExitFullScreenPlayback();
   };
 
@@ -224,8 +220,6 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   };
 
   const getPauseOrPlaybackIcon = () => {
-    console.log('getPauseOrPlaybackIcon');
-    console.log(props.playbackActive);
 
     if (props.playbackActive) {
       return (
@@ -248,9 +242,6 @@ const PhotoCollage = (props: PhotoCollageProps) => {
   };
 
   const getFullScreenOrFullScreenExitIcon = () => {
-
-    console.log('getFullScreenOrFullScreenExitIcon');
-    console.log(props.fullScreenDisplay);
 
     if (props.fullScreenDisplay) {
       return (
@@ -311,6 +302,7 @@ function mapStateToProps(state: PhotoCollageState, ownProps: any): Partial<Photo
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onStartPlayback: startPlayback,
+    onRestartPlayback: restartPlayback,
     onStopPlayback: stopPlayback,
     onEnterFullScreenPlayback: enterFullScreenPlayback,
     onExitFullScreenPlayback: exitFullScreenPlayback,
