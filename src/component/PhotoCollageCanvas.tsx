@@ -138,6 +138,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
   const renderPhoto = (filePath: string, x: number, y: number, width: number, height: number) => {
     const photo = new Image();
     photo.onload = () => {
+      console.log('invoke scaleToFit for: ', filePath);
       scaleToFit(photo, x, y, width, height);
     };
     photo.src = filePath;
@@ -147,6 +148,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     const scale = Math.min(widthOnCanvas / photo.width, heightOnCanvas / photo.height);
     const x = (widthOnCanvas / 2) - (photo.width / 2) * scale;
     const y = (heightOnCanvas / 2) - (photo.height / 2) * scale;
+    console.log('drawImage');
     ctx.drawImage(photo, x + xOnCanvas, y + yOnCanvas, photo.width * scale, photo.height * scale);
   };
 
@@ -263,6 +265,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
   if (!isNil(canvasRef) && !isNil(ctx)) {
     const context = ctx;
     context.imageSmoothingEnabled = false;
+    console.log('ClearRect invoked');
     context.clearRect(0, 0, canvasRef.width, canvasRef.height);
     if (props.fullScreenDisplay) {
       renderFullScreenPhoto();
