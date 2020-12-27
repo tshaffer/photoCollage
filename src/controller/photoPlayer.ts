@@ -25,6 +25,7 @@ import {
   getActivePhotoCollageSpec,
   getPhotosRootDirectory,
   getPhotoCollection,
+  getPhotosInCollage,
 } from '../selector';
 import {
   getFilePathFromPhotoInCollection,
@@ -88,8 +89,8 @@ const getNextCollagePhotos = () => {
     // before getting next set of photos, save current set of photos
     const photoCollageSpec: PhotoCollageSpec | null = getActivePhotoCollageSpec(getState());
     if (!isNil(photoCollageSpec)) {
-      const photosInCollageSpecs: PhotoInCollageSpec[] = photoCollageSpec.photosInCollageSpecs;
-      dispatch(setPriorPopulatedPhotoCollage(photosInCollageSpecs));
+      const photosInCollageSpec: PhotoInCollageSpec[] = getPhotosInCollage(getState());
+      dispatch(setPriorPopulatedPhotoCollage(photosInCollageSpec));
     }
 
     const photosInCollage: PhotoInCollageSpec[] = getCollagePhotos(getState());
@@ -122,7 +123,6 @@ export const startPlayback = () => {
 
 export const restartPlayback = () => {
   return ((dispatch: any, getState: any): any => {
-    debugger;
     dispatch(startPhotoPlayback());
     playbackTimer = setInterval(timeoutHandler, getTimeBetweenUpdates(getState()) * 1000, dispatch);
   });
