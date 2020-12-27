@@ -18,8 +18,8 @@ import { init } from './controller';
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-// readConfig('/storage/sd/config.env');
-readConfig('/Users/tedshaffer/Documents/Projects/photoCollage/src/config/config.env');
+readConfig('/storage/sd/config.env');
+// readConfig('/Users/tedshaffer/Documents/Projects/photoCollage/src/config/config.env');
 
 const store = createStore(photoCollageModelReducer, composeWithDevTools(applyMiddleware(thunk)));
 
