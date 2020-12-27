@@ -14,7 +14,6 @@ const SET_TIME_BETWEEN_UPDATES = 'SET_TIME_BETWEEN_UPDATES';
 const SET_PHOTO_COLLAGE_SPEC = 'SET_PHOTO_COLLAGE_SPEC';
 const SET_ACTIVE_POPULATED_PHOTO_COLLAGE = 'SET_ACTIVE_POPULATED_PHOTO_COLLAGE';
 const SET_PRIOR_POPULATED_PHOTO_COLLAGE = 'SET_PRIOR_POPULATED_PHOTO_COLLAGE';
-const SET_PREVIOUS_POPULATED_PHOTO_COLLAGE = 'SET_PREVIOUS_POPULATED_PHOTO_COLLAGE';
 const SET_SELECTED_DISLAYED_PHOTO = 'SET_SELECTED_DISLAYED_PHOTO';
 
 // ------------------------------------
@@ -97,18 +96,6 @@ export const setPriorPopulatedPhotoCollage = (
   };
 };
 
-export type SetPreviousPopulatedPhotoCollagePayload = string[];
-type SetPreviousPopulatedCollageAction = PhotoCollageModelAction<SetPreviousPopulatedPhotoCollagePayload>;
-
-export const setPreviousPopulatedPhotoCollage = (
-  photosInCollage: string[],
-): SetPreviousPopulatedCollageAction => {
-  return {
-    type: SET_PRIOR_POPULATED_PHOTO_COLLAGE,
-    payload: photosInCollage,
-  };
-};
-
 export type SetSelectedDisplayedPhotoPayload = DisplayedPhoto | null;
 type SetSelectedDisplayedPhotoAction = PhotoCollageModelAction<SetSelectedDisplayedPhotoPayload>;
 
@@ -131,13 +118,12 @@ const initialState: PhotoPlayer = {
   photoCollageSpec: '',
   photosInCollage: [],
   priorPhotosInCollage: [],
-  previousPhotosInCollage: [],
   selectedDisplayedPhoto: null,
 };
 
 export const photoPlayerReducer = (
   state: PhotoPlayer = initialState,
-  action: Action & SetTimeBetweenUpdatesAction & SetPhotoCollageSpecAction & SetActivePopulatedCollageAction & SetPriorPopulatedCollageAction & SetPreviousPopulatedCollageAction,
+  action: Action & SetTimeBetweenUpdatesAction & SetPhotoCollageSpecAction & SetActivePopulatedCollageAction & SetPriorPopulatedCollageAction,
 ): PhotoPlayer => {
   switch (action.type) {
     case START_PHOTO_PLAYBACK: {
@@ -185,19 +171,8 @@ export const photoPlayerReducer = (
     case SET_PRIOR_POPULATED_PHOTO_COLLAGE: {
       return {
         ...state,
-        // priorPhotosInCollage: cloneDeep(action.payload),
-        // fullScreenDisplay: false,
-        priorPhotosInCollage: [],
+        priorPhotosInCollage: cloneDeep(action.payload),
       };
-    }
-    case SET_PREVIOUS_POPULATED_PHOTO_COLLAGE: {
-      const newState = Object.assign({}, state);
-      // newState.previousPhotosInCollage = [];
-      return newState;
-      // return {
-      //   ...state,
-      //   previousPhotosInCollage: action.payload,
-      // };
     }
     case SET_SELECTED_DISLAYED_PHOTO: {
       return {

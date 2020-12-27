@@ -20,7 +20,6 @@ export const getPhotoCollageFilesSpec = (state: PhotoCollageState): string => {
 };
 
 export const getPhotosInCollage = (state: PhotoCollageState): PhotoInCollageSpec[] => {
-  console.log('selector getPhotosInCollage invoked');
   return state.photoPlayer.photosInCollage;
 };
 
@@ -30,8 +29,4 @@ export const getSelectedDisplayedPhoto = (state: PhotoCollageState): DisplayedPh
 
 export const getPriorPhotosInCollage = (state: PhotoCollageState): PhotoInCollageSpec[] => {
   return state.photoPlayer.priorPhotosInCollage;
-};
-
-export const getPreviousPhotosInCollage = (state: PhotoCollageState): string[] => {
-  return state.photoPlayer.previousPhotosInCollage;
 };

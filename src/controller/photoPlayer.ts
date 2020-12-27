@@ -19,7 +19,6 @@ import {
   enterFullScreenDisplay,
   exitFullScreenDisplay,
   setPriorPopulatedPhotoCollage,
-  setPreviousPopulatedPhotoCollage,
 } from '../model';
 import {
   getTimeBetweenUpdates,
@@ -117,13 +116,7 @@ const getNextCollagePhotos = () => {
     if (!isNil(photoCollageSpec)) {
       const photosInCollageSpecs: PhotoInCollageSpec[] = photoCollageSpec.photosInCollageSpecs;
       const priorPhotosInCollageSpecs = cloneDeep(photosInCollageSpecs);
-      // invoking this line causes the problems. why?????
-      // dispatch(setPriorPopulatedPhotoCollage(priorPhotosInCollageSpecs));
-      const previousPhotosInCollageSpecs: string[] = photosInCollageSpecs.map( (photosInCollageSpec: PhotoInCollageSpec) => {
-        return !isNil(photosInCollageSpec.filePath) ? photosInCollageSpec.filePath : '';
-      });
-      // dispatch(setPreviousPopulatedPhotoCollage(previousPhotosInCollageSpecs));
-      dispatch(setPreviousPopulatedPhotoCollage([]));
+      dispatch(setPriorPopulatedPhotoCollage(priorPhotosInCollageSpecs));
     }
 
     const photosInCollage: PhotoInCollageSpec[] = getCollagePhotos(getState());

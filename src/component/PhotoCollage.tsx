@@ -41,7 +41,6 @@ import {
   getPlaybackActive,
   getFullScreenDisplay,
   getPriorPhotosInCollage,
-  getPreviousPhotosInCollage,
 } from '../selector';
 
 // -----------------------------------------------------------------------
@@ -54,7 +53,6 @@ export interface PhotoCollageProps {
   playbackActive: boolean;
   fullScreenDisplay: boolean;
   priorPhotosInCollage: PhotoInCollageSpec[];
-  previousPhotosInCollage: string[];
   onRestartPlayback: () => any;
   onStartPlayback: () => any;
   onStopPlayback: () => any;
@@ -175,15 +173,9 @@ const PhotoCollage = (props: PhotoCollageProps) => {
 
   const handleReplay = () => {
 
-    debugger;
-
     // get state of playback, restore at end of handler
 
     props.onStopPlayback();
-
-    // get previous photos
-    const previousPhotosInCollage: string[] = props.previousPhotosInCollage;
-    console.log(previousPhotosInCollage);
 
     // get prior photos
     const priorPhotosInCollage: PhotoInCollageSpec[] = props.priorPhotosInCollage;
@@ -304,7 +296,6 @@ function mapStateToProps(state: PhotoCollageState, ownProps: any): Partial<Photo
     playbackActive: getPlaybackActive(state),
     fullScreenDisplay: getFullScreenDisplay(state),
     priorPhotosInCollage: getPriorPhotosInCollage(state),
-    previousPhotosInCollage: getPreviousPhotosInCollage(state),
   };
 }
 
