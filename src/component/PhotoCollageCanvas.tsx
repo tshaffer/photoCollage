@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { isNil } from 'lodash';
+import { cloneDeep, isNil } from 'lodash';
 
 import { photoCollageConfig } from '../config';
 
@@ -32,6 +32,7 @@ import {
   setSelectedDisplayedPhoto
 } from '../model';
 
+let uncachedPhotosInCollage: PhotoInCollageSpec[] = [];
 // -----------------------------------------------------------------------
 // Types
 // -----------------------------------------------------------------------
@@ -141,13 +142,31 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
   };
 
   const renderPhoto = (filePath: string, x: number, y: number, width: number, height: number) => {
+
+    if (uncachedPhotosInCollage.length === 0 || props.photosInCollage[0].filePath! !== uncachedPhotosInCollage[0].filePath!) {
+      uncachedPhotosInCollage = cloneDeep(props.photosInCollage);
+    }
+
     const photo: HTMLImageElement = new Image();
     photo.id = filePath;
     photo.onload = () => {
-      console.log('invoke scaleToFit for: ', filePath);
-      scaleToFit(photo, x, y, width, height);
+      console.log('onLoad: ', props.photosInCollage);
+      const filePathsInCollage: string[] = uncachedPhotosInCollage.map( (photoInCollage) => {
+        return isNil(photoInCollage.filePath) ? '' : photoInCollage.filePath;
+      });
+      // TEDTODO - may not work for BrightSign
+      const filePathWithoutUrlScheme: string = photo.id.substring(8);
+      // console.log(filePathWithoutUrlScheme);
+      if (filePathsInCollage.indexOf(filePathWithoutUrlScheme) >= 0) {
+        // console.log('invoke scaleToFit for: ', filePath);
+        scaleToFit(photo, x, y, width, height);  
+      }
+      // else {
+      //   debugger;
+      // }
     };
-    console.log('renderPhoto: set src: ' + filePath);
+    // console.log('renderPhoto: set src: ' + filePath);
+    console.log('set src: ', props.photosInCollage);
     photo.src = filePath;
   };
 
@@ -155,7 +174,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
     const scale = Math.min(widthOnCanvas / photo.width, heightOnCanvas / photo.height);
     const x = (widthOnCanvas / 2) - (photo.width / 2) * scale;
     const y = (heightOnCanvas / 2) - (photo.height / 2) * scale;
-    console.log('drawImage');
+    // console.log('drawImage');
     ctx.drawImage(photo, x + xOnCanvas, y + yOnCanvas, photo.width * scale, photo.height * scale);
   };
 
@@ -191,7 +210,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   const renderPhotosInCollage = () => {
 
-    console.log('renderPhotosInCollage');
+    // console.log('renderPhotosInCollage');
 
     const photosInCollage: PhotoInCollageSpec[] = props.photosInCollage;
     if (photosInCollage.length === 0) {
@@ -199,7 +218,7 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       return;
     }
 
-    console.log(props.photosInCollage);
+    // console.log(props.photosInCollage);
 
     photoImages = [];
     const { collageWidth, collageHeight, photosInCollageSpecs } = props.photoCollageSpec!;

@@ -20,6 +20,7 @@ export const getPhotoCollageFilesSpec = (state: PhotoCollageState): string => {
 };
 
 export const getPhotosInCollage = (state: PhotoCollageState): PhotoInCollageSpec[] => {
+  console.log('selector getPhotosInCollage invoked');
   return state.photoPlayer.photosInCollage;
 };
 
