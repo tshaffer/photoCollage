@@ -99,6 +99,7 @@ export interface PhotoPlayer {
   photoCollageSpec: string;
   photosInCollage: PhotoInCollageSpec[];
   priorPhotosInCollage: PhotoInCollageSpec[];
+  previousPhotosInCollage: string[];
   selectedDisplayedPhoto: DisplayedPhoto | null;
 }
 

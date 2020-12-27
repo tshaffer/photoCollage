@@ -33,6 +33,7 @@ export const fetchModelAsync = (): Promise<PhotoCollageModelState> => {
       photoCollageSpec: '',
       photosInCollage: [],
       priorPhotosInCollage: [],
+      previousPhotosInCollage: [],
       selectedDisplayedPhoto: null,
     };
     const model = createModel(

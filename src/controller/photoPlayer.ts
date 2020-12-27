@@ -18,8 +18,8 @@ import {
   stopPhotoPlayback,
   enterFullScreenDisplay,
   exitFullScreenDisplay,
-  photoCollageSpecsReducer,
   setPriorPopulatedPhotoCollage,
+  setPreviousPopulatedPhotoCollage,
 } from '../model';
 import {
   getTimeBetweenUpdates,
@@ -82,6 +82,33 @@ const getCollagePhotos = (state: PhotoCollageState): PhotoInCollageSpec[] => {
   return photosInCollage;
 };
 
+// const getNextCollagePhotos = () => {
+//   return ((dispatch: any, getState: any) => {
+
+//     // before getting next set of photos, save current set of photos
+//     const photoCollageSpec: PhotoCollageSpec | null = getActivePhotoCollageSpec(getState());
+//     if (!isNil(photoCollageSpec)) {
+//       const photosInCollageSpecs: PhotoInCollageSpec[] = photoCollageSpec.photosInCollageSpecs;
+//       dispatch(setPriorPopulatedPhotoCollage(photosInCollageSpecs));
+//     }
+
+//     const photosInCollage: PhotoInCollageSpec[] = getCollagePhotos(getState());
+//     dispatch(setPopulatedPhotoCollage(photosInCollage));
+//   });
+// };
+
+export const setPopulatedPhotoCollage = (photosInCollage: PhotoInCollageSpec[]) => {
+  return ((dispatch: any, getState: any) => {
+    debugger;
+    // dispatch(setActivePopulatedPhotoCollage(photosInCollage));
+    // const filePaths: string[] = photosInCollage.map((photoInCollage) => {
+    //   return photoInCollage.filePath!;
+    // });
+    // const photosInCollageUniqueId = filePaths.join('|');
+    // dispatch(setPhotoCollageUniqueId(photosInCollageUniqueId));
+  });
+};
+
 const getNextCollagePhotos = () => {
   return ((dispatch: any, getState: any) => {
 
@@ -89,16 +116,17 @@ const getNextCollagePhotos = () => {
     const photoCollageSpec: PhotoCollageSpec | null = getActivePhotoCollageSpec(getState());
     if (!isNil(photoCollageSpec)) {
       const photosInCollageSpecs: PhotoInCollageSpec[] = photoCollageSpec.photosInCollageSpecs;
-      dispatch(setPriorPopulatedPhotoCollage(photosInCollageSpecs));
+      const priorPhotosInCollageSpecs = cloneDeep(photosInCollageSpecs);
+      // invoking this line causes the problems. why?????
+      // dispatch(setPriorPopulatedPhotoCollage(priorPhotosInCollageSpecs));
+      const previousPhotosInCollageSpecs: string[] = photosInCollageSpecs.map( (photosInCollageSpec: PhotoInCollageSpec) => {
+        return !isNil(photosInCollageSpec.filePath) ? photosInCollageSpec.filePath : '';
+      });
+      // dispatch(setPreviousPopulatedPhotoCollage(previousPhotosInCollageSpecs));
+      dispatch(setPreviousPopulatedPhotoCollage([]));
     }
 
     const photosInCollage: PhotoInCollageSpec[] = getCollagePhotos(getState());
-    dispatch(setPopulatedPhotoCollage(photosInCollage));
-  });
-};
-
-export const setPopulatedPhotoCollage = (photosInCollage: PhotoInCollageSpec[]) => {
-  return ((dispatch: any, getState: any) => {
     dispatch(setActivePopulatedPhotoCollage(photosInCollage));
     const filePaths: string[] = photosInCollage.map((photoInCollage) => {
       return photoInCollage.filePath!;
@@ -122,6 +150,7 @@ export const startPlayback = () => {
 
 export const restartPlayback = () => {
   return ((dispatch: any, getState: any): any => {
+    debugger;
     dispatch(startPhotoPlayback());
     playbackTimer = setInterval(timeoutHandler, getTimeBetweenUpdates(getState()) * 1000, dispatch);
   });

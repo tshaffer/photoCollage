@@ -26,6 +26,7 @@ import {
   getPhotosInCollage,
   getSelectedDisplayedPhoto,
   getPriorPhotosInCollage,
+  getPreviousPhotosInCollage,
 } from '../selector';
 import {
   setSelectedDisplayedPhoto
@@ -56,6 +57,7 @@ export interface PhotoCollageCanvasProps extends PhotoCollageCanvasPropsFromPare
   photoCollageSpec: PhotoCollageSpec | null;
   photosInCollage: PhotoInCollageSpec[];
   priorPhotosInCollage: PhotoInCollageSpec[];
+  previousPhotosInCollage: string[];
   onStartPlayback: () => any;
   onStopPlayback: () => any;
   onSetSelectedDisplayedPhoto: (selectedDisplayPhoto: DisplayedPhoto | null) => any;
@@ -140,11 +142,12 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   const renderPhoto = (filePath: string, x: number, y: number, width: number, height: number) => {
     const photo: HTMLImageElement = new Image();
+    photo.id = filePath;
     photo.onload = () => {
       console.log('invoke scaleToFit for: ', filePath);
       scaleToFit(photo, x, y, width, height);
     };
-    console.log('renderPhoto: set src');
+    console.log('renderPhoto: set src: ' + filePath);
     photo.src = filePath;
   };
 
@@ -188,10 +191,15 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   const renderPhotosInCollage = () => {
 
+    console.log('renderPhotosInCollage');
+
     const photosInCollage: PhotoInCollageSpec[] = props.photosInCollage;
     if (photosInCollage.length === 0) {
+      console.log('photosInCollage empty: return');
       return;
     }
+
+    console.log(props.photosInCollage);
 
     photoImages = [];
     const { collageWidth, collageHeight, photosInCollageSpecs } = props.photoCollageSpec!;
@@ -226,6 +234,8 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
 
   const renderFullScreenPhoto = () => {
 
+    debugger;
+
     const selectedPhoto: DisplayedPhoto | null = props.selectedDisplayPhoto;
     if (isNil(selectedPhoto)) {
       return;
@@ -256,6 +266,8 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       screenCoordinates.height);
   };
 
+  console.log('in main loop before renderPhotoCollage definition');
+
   const renderPhotoCollage = () => {
     if (isNil(props.photoCollageSpec) ||
       isNil(props.photoCollection) ||
@@ -263,10 +275,14 @@ const PhotoCollageCanvas = (props: PhotoCollageCanvasProps) => {
       props.photoCollection.photosInCollection.length === 0) {
       return;
     }
+    console.log('invoke renderPhotoCollage');
     renderPhotosInCollage();
   };
 
+  console.log('in main loop after renderPhotoCollage definition');
+
   if (!isNil(canvasRef) && !isNil(ctx)) {
+    console.log('canvasRef and/or ctx are good');
     const context = ctx;
     context.imageSmoothingEnabled = false;
     console.log('ClearRect invoked');
@@ -299,6 +315,7 @@ function mapStateToProps(state: PhotoCollageState, ownProps: PhotoCollageCanvasP
     photoCollageSpec: getActivePhotoCollageSpec(state),
     photosInCollage: getPhotosInCollage(state),
     priorPhotosInCollage: getPriorPhotosInCollage(state),
+    previousPhotosInCollage: getPreviousPhotosInCollage(state),
     selectedDisplayPhoto: getSelectedDisplayedPhoto(state),
     onSelectPhoto: ownProps.onSelectPhoto,
   };
